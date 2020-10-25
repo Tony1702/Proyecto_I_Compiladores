@@ -25,6 +25,12 @@ public class ProcDeclaration extends Declaration {
     FPS = fpsAST;
     C = cAST;
   }
+  
+  public ProcDeclaration (Identifier iAST, FormalParameterSequence fpsAST, SourcePosition thePosition) {
+    super (thePosition);
+    I = iAST;
+    FPS = fpsAST;
+  }
 
   public Object visit (Visitor v, Object o) {
     return v.visitProcDeclaration(this, o);

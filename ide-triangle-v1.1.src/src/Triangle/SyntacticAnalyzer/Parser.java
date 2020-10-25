@@ -626,10 +626,13 @@ public class Parser {
       {
         acceptIt();
         Identifier iAST = parseIdentifier();
-        accept(Token.COLON);
-        TypeDenoter tAST = parseTypeDenoter();
+        //accept(Token.COLON);
+        accept(Token.BECOMES);
+        //TypeDenoter tAST = parseTypeDenoter();
+        Expression eAST = parseExpression();
         finish(declarationPos);
-        declarationAST = new VarDeclaration(iAST, tAST, declarationPos);
+        //declarationAST = new VarDeclaration(iAST, tAST, declarationPos);
+        declarationAST = new VarDeclaration(iAST, eAST, declarationPos);
       }
       break;
 
@@ -641,9 +644,11 @@ public class Parser {
         FormalParameterSequence fpsAST = parseFormalParameterSequence();
         accept(Token.RPAREN);
         accept(Token.IS);
-        Command cAST = parseSingleCommand();
+        accept(Token.END);
+        //Command cAST = parseSingleCommand();
         finish(declarationPos);
-        declarationAST = new ProcDeclaration(iAST, fpsAST, cAST, declarationPos);
+        //declarationAST = new ProcDeclaration(iAST, fpsAST, cAST, declarationPos);
+        declarationAST = new ProcDeclaration(iAST, fpsAST, declarationPos);
       }
       break;
 
