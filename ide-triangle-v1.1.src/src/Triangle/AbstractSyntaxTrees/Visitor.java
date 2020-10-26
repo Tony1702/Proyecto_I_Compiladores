@@ -48,7 +48,13 @@ public interface Visitor {
   public abstract Object visitTypeDeclaration(TypeDeclaration ast, Object o);
   public abstract Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o);
   public abstract Object visitVarDeclaration(VarDeclaration ast, Object o);
-
+  
+  // ProcFunction
+  public abstract Object visitProcProcFunction(ProcProcFunction ast, Object o);
+  public abstract Object visitFuncProcFunction(FuncProcFunction ast, Object o);
+  
+  // ProcFunctions
+  
   // Array Aggregates
   public abstract Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o);
   public abstract Object visitSingleArrayAggregate(SingleArrayAggregate ast, Object o);

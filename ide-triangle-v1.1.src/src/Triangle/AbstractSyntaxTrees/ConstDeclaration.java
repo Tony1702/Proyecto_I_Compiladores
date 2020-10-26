@@ -24,6 +24,13 @@ public class ConstDeclaration extends Declaration {
     I = iAST;
     E = eAST;
   }
+  
+  public ConstDeclaration (Declaration dAST, Declaration d2AST,
+                    SourcePosition thePosition) {
+    super (thePosition);
+    D = dAST;
+    D2 = d2AST;
+  }
 
   public Object visit(Visitor v, Object o) {
     return v.visitConstDeclaration(this, o);
@@ -31,4 +38,6 @@ public class ConstDeclaration extends Declaration {
 
   public Identifier I;
   public Expression E;
+  public Declaration D;
+  public Declaration D2;
 }

@@ -42,6 +42,7 @@ import Triangle.AbstractSyntaxTrees.FormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.FuncActualParameter;
 import Triangle.AbstractSyntaxTrees.FuncDeclaration;
 import Triangle.AbstractSyntaxTrees.FuncFormalParameter;
+import Triangle.AbstractSyntaxTrees.FuncProcFunction;
 import Triangle.AbstractSyntaxTrees.Identifier;
 import Triangle.AbstractSyntaxTrees.IfCommand;
 import Triangle.AbstractSyntaxTrees.IfExpression;
@@ -58,6 +59,8 @@ import Triangle.AbstractSyntaxTrees.Operator;
 import Triangle.AbstractSyntaxTrees.ProcActualParameter;
 import Triangle.AbstractSyntaxTrees.ProcDeclaration;
 import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
+import Triangle.AbstractSyntaxTrees.ProcFunction;
+import Triangle.AbstractSyntaxTrees.ProcProcFunction;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordAggregate;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
@@ -596,6 +599,7 @@ public class Parser {
     while (currentToken.kind == Token.SEMICOLON) {
       acceptIt();
       Declaration d2AST = parseSingleDeclaration();
+      //Declaration d2AST = parseCompoundDeclaration();
       finish(declarationPos);
       declarationAST = new SequentialDeclaration(declarationAST, d2AST,
         declarationPos);
@@ -689,6 +693,99 @@ public class Parser {
     return declarationAST;
   }
 
+  Declaration parseCompoundDeclaration() throws SyntaxError {
+    Declaration declarationAST = null; // in case there's a syntactic error
+
+    SourcePosition declarationPos = new SourcePosition();
+    start(declarationPos);
+
+    switch (currentToken.kind) {
+        
+//    case Token.RECURSIVE:
+//        {
+//          acceptIt();
+//          Proc-Funcs pfsAST = parseProc-Funcs(); //falta crear las reglas proc-funcs y proc-func
+//          accept(Token.END);
+//          finish(declarationPos);
+//          declarationAST = new ConstDeclaration(pfsAST, declarationPos);
+//        }
+//        break;
+    
+    case Token.LOCAL:
+        {
+          acceptIt();
+          Declaration dAST = parseDeclaration();
+          accept(Token.IN);
+          Declaration d2AST = parseDeclaration();
+          accept(Token.END);
+          finish(declarationPos);
+          declarationAST = new ConstDeclaration(dAST, d2AST, declarationPos);
+        }
+        break;
+        
+    default:
+      syntacticError("\"%\" cannot start a declaration",
+        currentToken.spelling);
+      break;
+
+    }
+    return declarationAST;
+  }
+  
+///////////////////////////////////////////////////////////////////////////////
+//
+// PROC
+//
+///////////////////////////////////////////////////////////////////////////////  
+ 
+ProcFunction parseProcFunction() throws SyntaxError {
+    ProcFunction procFunctionAST = null; // in case there's a syntactic error
+    
+    SourcePosition procFunctionPos = new SourcePosition();
+    
+    start (procFunctionPos);
+    
+    switch (currentToken.kind) {
+
+    case Token.PROC:
+      {
+        acceptIt();
+        Identifier iAST = parseIdentifier();
+        accept(Token.LPAREN);
+        FormalParameterSequence fpsAST = parseFormalParameterSequence();
+        accept(Token.RPAREN);
+        accept(Token.IS);
+        Command cAST = parseCommand();
+        accept(Token.END);
+        finish(procFunctionPos);
+        procFunctionAST = new ProcProcFunction(iAST, fpsAST, cAST, procFunctionPos);
+      }
+      break;
+
+    case Token.FUNC:
+      {
+        acceptIt();
+        Identifier iAST = parseIdentifier();
+        accept(Token.LPAREN);
+        FormalParameterSequence fpsAST = parseFormalParameterSequence();
+        accept(Token.RPAREN);
+        accept(Token.COLON);
+        TypeDenoter tAST = parseTypeDenoter();
+        accept(Token.IS);
+        Expression eAST = parseExpression();
+        finish(procFunctionPos);
+        procFunctionAST = new FuncProcFunction(iAST, fpsAST, tAST, eAST, procFunctionPos);
+      }
+      break;
+
+    default:
+      syntacticError("\"%\" cannot start a ProcFunc",
+        currentToken.spelling);
+      break;
+    }
+    return procFunctionAST;
+  }  
+  
 ///////////////////////////////////////////////////////////////////////////////
 //
 // PARAMETERS
