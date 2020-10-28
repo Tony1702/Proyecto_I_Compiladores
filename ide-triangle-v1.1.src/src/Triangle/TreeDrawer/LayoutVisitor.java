@@ -33,6 +33,7 @@ import Triangle.AbstractSyntaxTrees.ConstActualParameter;
 import Triangle.AbstractSyntaxTrees.ConstDeclaration;
 import Triangle.AbstractSyntaxTrees.ConstFormalParameter;
 import Triangle.AbstractSyntaxTrees.DotVname;
+import Triangle.AbstractSyntaxTrees.ElseCommand;
 import Triangle.AbstractSyntaxTrees.EmptyActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.EmptyCommand;
 import Triangle.AbstractSyntaxTrees.EmptyExpression;
@@ -41,7 +42,7 @@ import Triangle.AbstractSyntaxTrees.ErrorTypeDenoter;
 import Triangle.AbstractSyntaxTrees.FuncActualParameter;
 import Triangle.AbstractSyntaxTrees.FuncDeclaration;
 import Triangle.AbstractSyntaxTrees.FuncFormalParameter;
-import Triangle.AbstractSyntaxTrees.FuncProcFunction;
+import Triangle.AbstractSyntaxTrees.FuncProc_Func;
 import Triangle.AbstractSyntaxTrees.Identifier;
 import Triangle.AbstractSyntaxTrees.IfCommand;
 import Triangle.AbstractSyntaxTrees.IfExpression;
@@ -59,7 +60,7 @@ import Triangle.AbstractSyntaxTrees.Operator;
 import Triangle.AbstractSyntaxTrees.ProcActualParameter;
 import Triangle.AbstractSyntaxTrees.ProcDeclaration;
 import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
-import Triangle.AbstractSyntaxTrees.ProcProcFunction;
+import Triangle.AbstractSyntaxTrees.ProcProc_Func;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
@@ -169,7 +170,6 @@ public class LayoutVisitor implements Visitor {
     return layoutUnary("VnameExpr.", ast.V);
   }
 
-
   // Declarations
   public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object obj) {
     return layoutQuaternary("Bin.Op.Decl.", ast.O, ast.ARG1, ast.ARG2, ast.RES);
@@ -202,7 +202,17 @@ public class LayoutVisitor implements Visitor {
   public Object visitVarDeclaration(VarDeclaration ast, Object obj) {
     return layoutBinary("VarDecl.", ast.I, ast.T);
   }
+  
+  // Proc_Func
+  @Override
+ public Object visitProcProc_Func(ProcProc_Func ast, Object o) {
+    return layoutTernary("ProcProc_Func.", ast.I, ast.FPS, ast.C);
+ }
 
+ @Override
+ public Object visitFuncProc_Func(FuncProc_Func ast, Object o) {
+    return layoutQuaternary("FunProc_Func.", ast.I, ast.FPS, ast.T, ast.E);
+ }
 
   // Array Aggregates
   public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object obj) {
@@ -546,12 +556,7 @@ public class LayoutVisitor implements Visitor {
   }
 
     @Override
-    public Object visitProcProcFunction(ProcProcFunction ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitFuncProcFunction(FuncProcFunction ast, Object o) {
+    public Object visitElseCommand(ElseCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

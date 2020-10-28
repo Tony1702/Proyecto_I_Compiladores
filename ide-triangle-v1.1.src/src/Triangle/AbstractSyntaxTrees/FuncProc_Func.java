@@ -11,9 +11,9 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
  *
  * @author Tony1
  */
-public class FuncProcFunction extends ProcFunction {
+public class FuncProc_Func extends Proc_Func {
 
-  public FuncProcFunction (Identifier iAST, FormalParameterSequence fpsAST, TypeDenoter tAST, Expression eAST,
+  public FuncProc_Func (Identifier iAST, FormalParameterSequence fpsAST, TypeDenoter tAST, Expression eAST,
              SourcePosition thePosition) {
     super (thePosition);
     I = iAST;
@@ -23,7 +23,7 @@ public class FuncProcFunction extends ProcFunction {
   }
 
   public Object visit(Visitor v, Object o) {
-    return v.visitFuncProcFunction(this, o);
+    return v.visitFuncProc_Func(this, o);
   }
 
   public Identifier I;

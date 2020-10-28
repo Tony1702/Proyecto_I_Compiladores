@@ -21,6 +21,7 @@ public interface Visitor {
   public abstract Object visitCallCommand(CallCommand ast, Object o);
   public abstract Object visitEmptyCommand(EmptyCommand ast, Object o);
   public abstract Object visitIfCommand(IfCommand ast, Object o);
+  public abstract Object visitElseCommand(ElseCommand ast, Object o);
   public abstract Object visitLetCommand(LetCommand ast, Object o);
   public abstract Object visitSequentialCommand(SequentialCommand ast, Object o);
   public abstract Object visitWhileCommand(WhileCommand ast, Object o);
@@ -50,8 +51,8 @@ public interface Visitor {
   public abstract Object visitVarDeclaration(VarDeclaration ast, Object o);
   
   // ProcFunction
-  public abstract Object visitProcProcFunction(ProcProcFunction ast, Object o);
-  public abstract Object visitFuncProcFunction(FuncProcFunction ast, Object o);
+  public abstract Object visitProcProc_Func(ProcProc_Func ast, Object o);
+  public abstract Object visitFuncProc_Func(FuncProc_Func ast, Object o);
   
   // ProcFunctions
   
