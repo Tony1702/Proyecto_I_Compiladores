@@ -78,6 +78,7 @@ import Triangle.CodeGenerator.KnownValue;
 import Triangle.CodeGenerator.UnknownAddress;
 import Triangle.CodeGenerator.UnknownRoutine;
 import Triangle.CodeGenerator.UnknownValue;
+import Triangle.AbstractSyntaxTrees.LoopCommand; //nuevo
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -140,6 +141,11 @@ public class TableVisitor implements Visitor {
       ast.E.visit(this, null);
       ast.C.visit(this, null);
       
+      return(null);
+  }
+  
+  //nuevo command
+  public Object visitLoopCommand(LoopCommand ast, Object o) { 
       return(null);
   }
   // </editor-fold>
