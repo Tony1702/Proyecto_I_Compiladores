@@ -269,7 +269,7 @@ public class Parser {
   }
 
   Command parseSingleCommand() throws SyntaxError {
-    Command commandAST = null; // in case there's a syntactic error
+     Command commandAST = null; // in case there's a syntactic error
 
     SourcePosition commandPos = new SourcePosition();
     start(commandPos);
@@ -325,46 +325,29 @@ public class Parser {
         commandAST = new LetCommand(dAST, cAST, commandPos);  
       }
       break;
-      
-//    case Token.IF:
-//      {
-//        acceptIt();
-//        Expression eAST = parseExpression();
-//        accept(Token.THEN);
-//        Command c1AST = parseSingleCommand();
-//        accept(Token.ELSE);
-//        Command c2AST = parseSingleCommand();
-//        finish(commandPos);
-//        commandAST = new IfCommand(eAST, c1AST, c2AST, commandPos);
-//      }
-//      break;
+
     case Token.IF:
       {
         acceptIt();
         Expression e1AST = parseExpression();
         accept(Token.THEN);
         Command c1AST = parseCommand();
-        accept(Token.LPAREN);
-        accept(Token.ELSEIF);
-        Expression e2AST = parseExpression();
-        accept(Token.THEN);
-        Command c2AST = parseCommand();
-        accept(Token.RPAREN);
+        Command c2AST = parseRestOfIf();
         //accept(Token.);
         finish(commandPos);
-        commandAST = new IfCommand(e1AST, c1AST, c2AST, e2AST, commandPos);
+        commandAST = new IfCommand(e1AST, c1AST, c2AST,commandPos);
       }
       break;
       
-    case Token.ELSE:
-      {
-        acceptIt();
-        Command cAST = parseCommand();
-        accept(Token.END);
-        finish(commandPos);
-        commandAST = new ElseCommand(cAST, commandPos);
-      }
-      break;
+//    case Token.ELSE:
+//      {
+//        acceptIt();
+//        Command cAST = parseCommand();
+//        accept(Token.END);
+//        finish(commandPos);
+//        commandAST = new ElseCommand(cAST, commandPos);
+//      }
+//      break;
       
     case Token.SELECT:
       {
@@ -433,6 +416,35 @@ public class Parser {
     }
 
     return commandAST;
+  }
+  
+  Command parseRestOfIf() throws SyntaxError{
+      Command commandAST = null;
+      SourcePosition commandPos = new SourcePosition();
+      start(commandPos);
+      switch(currentToken.kind){
+          case Token.ELSE:{
+              acceptIt();
+              Command cAST = parseCommand();
+              accept(Token.END);
+              commandAST = cAST;
+          }
+          break;
+          case Token.ELSEIF:{
+              acceptIt();
+              Expression eAST = parseExpression();
+              accept(Token.THEN);
+              Command cAST = parseCommand();
+              Command c2AST = parseRestOfIf();
+              finish(commandPos);
+              commandAST = new IfCommand(eAST, cAST, c2AST, commandPos);
+          }
+          break;
+          default:
+              syntacticError("\"%\" cannot start a command", currentToken.spelling);
+              break;
+      }
+      return commandAST;
   }
 
 ///////////////////////////////////////////////////////////////////////////////
