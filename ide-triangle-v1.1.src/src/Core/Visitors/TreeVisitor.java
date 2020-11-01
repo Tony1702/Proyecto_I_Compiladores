@@ -202,6 +202,17 @@ public class TreeVisitor implements Visitor {
     }
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc=" Proc_Func ">
+    // Proc_Func
+    public Object visitProcProc_Func(ProcProc_Func ast, Object o) {
+        return(createTernary("Procedure Declaration", ast.I, ast.FPS, ast.C));
+    }
+
+    public Object visitFuncProc_Func(FuncProc_Func ast, Object o) {
+        return(createQuaternary("Function Declaration", ast.I, ast.FPS, ast.T, ast.E));
+    }
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc=" Aggregates ">
     // Array Aggregates
     public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object obj) {
@@ -440,16 +451,6 @@ public class TreeVisitor implements Visitor {
         return(t);             
     }
     // </editor-fold>
-
-    @Override
-    public Object visitProcProc_Func(ProcProc_Func ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitFuncProc_Func(FuncProc_Func ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public Object visitElseCommand(ElseCommand ast, Object o) {

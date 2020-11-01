@@ -15,6 +15,7 @@
 package Triangle.ContextualAnalyzer;
 
 import Triangle.AbstractSyntaxTrees.Declaration;
+import Triangle.AbstractSyntaxTrees.Proc_Func;
 
 public final class IdentificationTable {
 
@@ -57,6 +58,29 @@ public final class IdentificationTable {
   // same identifier at the current level.
 
   public void enter (String id, Declaration attr) {
+
+    IdEntry entry = this.latest;
+    boolean present = false, searching = true;
+
+    // Check for duplicate entry ...
+    while (searching) {
+      if (entry == null || entry.level < this.level)
+        searching = false;
+      else if (entry.id.equals(id)) {
+        present = true;
+        searching = false;
+       } else
+       entry = entry.previous;
+    }
+
+    attr.duplicated = present;
+    // Add new entry ...
+    entry = new IdEntry(id, attr, this.level, this.latest);
+    this.latest = entry;
+  }
+  
+  // PARA PROC-FUNC
+    public void enter (String id, Proc_Func attr) {
 
     IdEntry entry = this.latest;
     boolean present = false, searching = true;

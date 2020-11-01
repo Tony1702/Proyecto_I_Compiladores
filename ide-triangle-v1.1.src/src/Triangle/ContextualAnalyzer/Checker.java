@@ -356,6 +356,36 @@ public final class Checker implements Visitor {
     return null;
   }
 
+  // Proc_Func
+  
+  public Object visitProcProc_Func(ProcProc_Func ast, Object o) {
+      idTable.enter (ast.I.spelling, ast); // permits recursion
+    if (ast.duplicated)
+      reporter.reportError ("identifier \"%\" already declared",
+                            ast.I.spelling, ast.position);
+    idTable.openScope();
+    ast.FPS.visit(this, null);
+    ast.C.visit(this, null);
+    idTable.closeScope();
+    return null;
+  }
+
+  public Object visitFuncProc_Func(FuncProc_Func ast, Object o) {
+      ast.T = (TypeDenoter) ast.T.visit(this, null);
+    idTable.enter (ast.I.spelling, ast); // permits recursion
+    if (ast.duplicated)
+      reporter.reportError ("identifier \"%\" already declared",
+                            ast.I.spelling, ast.position);
+    idTable.openScope();
+    ast.FPS.visit(this, null);
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    idTable.closeScope();
+    if (! ast.T.equals(eType))
+      reporter.reportError ("body of function \"%\" has wrong type",
+                            ast.I.spelling, ast.E.position);
+    return null;
+  }
+
   // Array Aggregates
 
   // Returns the TypeDenoter for the Array Aggregate. Does not use the
@@ -941,16 +971,6 @@ public final class Checker implements Visitor {
     StdEnvironment.unequalDecl = declareStdBinaryOp("\\=", StdEnvironment.anyType, StdEnvironment.anyType, StdEnvironment.booleanType);
 
   }
-
-    @Override
-    public Object visitProcProc_Func(ProcProc_Func ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitFuncProc_Func(FuncProc_Func ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public Object visitElseCommand(ElseCommand ast, Object o) {

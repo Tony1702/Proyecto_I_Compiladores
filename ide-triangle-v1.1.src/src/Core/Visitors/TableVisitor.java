@@ -312,7 +312,41 @@ public class TableVisitor implements Visitor {
   }
   
   // </editor-fold>
+  
+  // <editor-fold defaultstate="collapsed" desc=" Proc-Func ">
+  // Proc-Func
+  public Object visitProcProc_Func(ProcProc_Func ast, Object o) {
+            try {
+      addIdentifier(ast.I.spelling, "KnownRoutine", 
+              (ast.entity!=null?ast.entity.size:0), 
+              ((KnownRoutine)ast.entity).address.level, 
+              ((KnownRoutine)ast.entity).address.displacement, 
+              -1);
+      } catch (NullPointerException e) { }
+      
+      ast.FPS.visit(this, null);
+      ast.C.visit(this, null);
+            
+      return(null);
+  }
 
+  public Object visitFuncProc_Func(FuncProc_Func ast, Object o) {
+      try {
+      addIdentifier(ast.I.spelling, 
+              "KnownRoutine", 
+              (ast.entity!=null?ast.entity.size:0), 
+              ((KnownRoutine)ast.entity).address.level, 
+              ((KnownRoutine)ast.entity).address.displacement, 
+              -1);      
+      } catch (NullPointerException e) { }
+      ast.T.visit(this, null);            
+      ast.FPS.visit(this, null);
+      ast.E.visit(this, null);
+            
+      return(null);
+  }
+  // </editor-fold>
+  
   // <editor-fold defaultstate="collapsed" desc=" Aggregates ">
   // Array Aggregates
   public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o) { 
@@ -624,16 +658,6 @@ public class TableVisitor implements Visitor {
   // <editor-fold defaultstate="collapsed" desc=" Attributes ">
     private DefaultTableModel model;
     // </editor-fold>
-
-    @Override
-    public Object visitProcProc_Func(ProcProc_Func ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitFuncProc_Func(FuncProc_Func ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public Object visitElseCommand(ElseCommand ast, Object o) {

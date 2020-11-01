@@ -15,8 +15,8 @@ public abstract class Proc_Func extends AST {
 
   public Proc_Func (SourcePosition thePosition) {
     super (thePosition);
-    type = null;
+    duplicated = false;
   }
 
-  public TypeDenoter type;
+  public boolean duplicated;
 }

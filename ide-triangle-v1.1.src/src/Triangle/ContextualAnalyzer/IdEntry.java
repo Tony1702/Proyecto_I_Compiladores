@@ -15,17 +15,26 @@
 package Triangle.ContextualAnalyzer;
 
 import Triangle.AbstractSyntaxTrees.Declaration;
+import Triangle.AbstractSyntaxTrees.Proc_Func;
 
 public class IdEntry {
 
   protected String id;
   protected Declaration attr;
+  protected Proc_Func attr2;
   protected int level;
   protected IdEntry previous;
 
   IdEntry (String id, Declaration attr, int level, IdEntry previous) {
     this.id = id;
     this.attr = attr;
+    this.level = level;
+    this.previous = previous;
+  }
+  
+  IdEntry (String id, Proc_Func attr2, int level, IdEntry previous) {
+    this.id = id;
+    this.attr2 = attr2;
     this.level = level;
     this.previous = previous;
   }
