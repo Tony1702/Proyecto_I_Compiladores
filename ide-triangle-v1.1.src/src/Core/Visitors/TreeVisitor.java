@@ -71,6 +71,7 @@ import Triangle.AbstractSyntaxTrees.VarFormalParameter;
 import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopCommand; //nuevo
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -118,6 +119,10 @@ public class TreeVisitor implements Visitor {
     public Object visitWhileCommand(WhileCommand ast, Object obj) {
         return(createBinary("While Command", ast.E, ast.C));
     }
+    
+    public Object visitLoopCommand(LoopCommand ast, Object o) {
+        return(createNullary("Loop Command"));
+    }    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Expressions ">

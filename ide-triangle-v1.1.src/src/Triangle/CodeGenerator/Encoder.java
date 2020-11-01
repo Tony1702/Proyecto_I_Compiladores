@@ -92,6 +92,7 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.Vname;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopCommand;
 
 public final class Encoder implements Visitor {
 
@@ -161,6 +162,11 @@ public final class Encoder implements Visitor {
     return null;
   }
 
+   //nuevo método
+  public Object visitLoopCommand(LoopCommand ast, Object o) {
+      
+      return null;
+  }
 
   // Expressions
   public Object visitArrayExpression(ArrayExpression ast, Object o) {

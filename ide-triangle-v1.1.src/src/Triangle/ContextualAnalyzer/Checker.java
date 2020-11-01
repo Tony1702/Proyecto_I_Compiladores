@@ -89,6 +89,7 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
 import Triangle.SyntacticAnalyzer.SourcePosition;
+import Triangle.AbstractSyntaxTrees.LoopCommand;
 
 public final class Checker implements Visitor {
 
@@ -157,6 +158,11 @@ public final class Checker implements Visitor {
     return null;
   }
 
+  //nuevo método
+  public Object visitLoopCommand(LoopCommand ast, Object o) {
+      
+      return null;
+  }
   // Expressions
 
   // Returns the TypeDenoter denoting the type of the expression. Does
