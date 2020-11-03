@@ -38,6 +38,10 @@ import Triangle.AbstractSyntaxTrees.IntTypeDenoter;
 import Triangle.AbstractSyntaxTrees.IntegerExpression;
 import Triangle.AbstractSyntaxTrees.IntegerLiteral;
 import Triangle.AbstractSyntaxTrees.LetCommand;
+import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
+import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
+import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
 import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
@@ -147,6 +151,28 @@ public class TableVisitor implements Visitor {
   //nuevo command
   public Object visitLoopCommand(LoopCommand ast, Object o) { 
       return(null);
+  }
+  public Object visitLoopWhileCommand(LoopWhileCommand ast, Object o){
+      ast.E.visit(this, null);
+      ast.C.visit(this, null);
+      return (null);
+  } 
+  public Object visitLoopUntilCommand(LoopUntilCommand ast, Object o){
+      ast.E.visit(this, null);
+      ast.C.visit(this, null);
+      return (null);
+  }
+  
+  public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o){
+      ast.E.visit(this, null);
+      ast.C.visit(this, null);
+      return (null);
+  }
+  
+  public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o){
+      ast.E.visit(this, null);
+      ast.C.visit(this, null);
+      return (null);
   }
   // </editor-fold>
 

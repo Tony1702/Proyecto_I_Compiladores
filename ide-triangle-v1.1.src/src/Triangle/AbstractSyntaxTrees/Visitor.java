@@ -26,8 +26,11 @@ public interface Visitor {
   public abstract Object visitSequentialCommand(SequentialCommand ast, Object o);
   public abstract Object visitWhileCommand(WhileCommand ast, Object o);
   public abstract Object visitLoopCommand(LoopCommand ast, Object o); //nuevo command
-
-
+  public abstract Object visitLoopWhileCommand(LoopWhileCommand ast, Object o);//nuevo command
+  public abstract Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o);
+  public abstract Object visitLoopUntilCommand(LoopUntilCommand ast, Object o);
+  public abstract Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o);
+  
   // Expressions
   public abstract Object visitArrayExpression(ArrayExpression ast, Object o);
   public abstract Object visitBinaryExpression(BinaryExpression ast, Object o);
@@ -111,5 +114,11 @@ public interface Visitor {
 
   // Programs
   public abstract Object visitProgram(Program ast, Object o);
+
+    
+
+    
+
+    
 
 }

@@ -51,6 +51,10 @@ import Triangle.AbstractSyntaxTrees.IntegerExpression;
 import Triangle.AbstractSyntaxTrees.IntegerLiteral;
 import Triangle.AbstractSyntaxTrees.LetCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
+import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
+import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
+import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
 import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
@@ -364,30 +368,51 @@ public class Parser {
     case Token.LOOP:
       {
         acceptIt();
-        if(currentToken.kind == Token.WHILE || currentToken.kind == Token.UNTIL){
-            if(currentToken.kind == Token.WHILE)
-                accept(Token.WHILE);
-            else
-                accept(Token.UNTIL);
-            Expression eAST = parseExpression();
-            accept(Token.DO);
-            Command cAST = parseCommand();
+        switch(currentToken.kind){
+            case Token.WHILE:{
+                acceptIt();
+                Expression eAst = parseExpression();
+                accept(Token.DO);
+                Command cAST = parseCommand();
+                accept(Token.END);
+                finish(commandPos);
+                commandAST = new LoopWhileCommand(eAst, cAST, commandPos);
+                break;
+            }
+            case Token.DO:{
+                acceptIt();
+                Command cAST = parseCommand();
+                if (currentToken.kind == Token.WHILE){
+                    acceptIt();
+                    Expression eAST = parseExpression();
+                    accept(Token.END);
+                    finish(commandPos);
+                    commandAST = new LoopDoWhileCommand(cAST, eAST, commandPos);
+                }
+                else if (currentToken.kind == Token.UNTIL){
+                    acceptIt();
+                    Expression eAST = parseExpression();
+                    accept(Token.END);
+                    finish(commandPos);
+                    commandAST = new LoopDoUntilCommand(cAST, eAST, commandPos);
+                    break;
+                }
+            }
+            case Token.UNTIL:{
+                acceptIt();
+                Expression eAST = parseExpression();
+                accept(Token.DO);
+                Command cAST = parseCommand();
+                accept(Token.END);
+                finish(commandPos);
+                commandAST = new LoopUntilCommand(eAST, cAST, commandPos);
+                break;
+            }
         }
-
-        if(currentToken.kind == Token.DO){
-            Command cAST = parseCommand();
-            if(currentToken.kind == Token.WHILE)
-                accept(Token.WHILE);
-            else
-                accept(Token.UNTIL);
-            Expression eAST = parseExpression();           
-        }
-        accept(Token.END);
-        finish(commandPos);
-        //commandAST = new LoopCommand(eAST, cAST, commandPos);
+        return commandAST;
       }
-      break;
       
+    
 //    case Token.WHILE:
 //      {
 //        acceptIt();

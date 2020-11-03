@@ -72,6 +72,10 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopCommand; //nuevo
+import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
+import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
+import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -123,6 +127,20 @@ public class TreeVisitor implements Visitor {
     public Object visitLoopCommand(LoopCommand ast, Object o) {
         return(createNullary("Loop Command"));
     }    
+    public Object visitLoopWhileCommand(LoopWhileCommand ast, Object obj){
+        return(createBinary("Loop While Do Command", ast.E, ast.C));
+    }
+    
+    public Object visitLoopUntilCommand(LoopUntilCommand ast, Object obj){
+        return(createBinary("Loop Until Do Command", ast.E, ast.C));
+        
+    }
+    public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object obj){
+        return(createBinary("Loop Do Until Command", ast.E, ast.C));
+    }
+    public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object obj){
+        return(createBinary("Loop Do While Command", ast.E, ast.C));
+    }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Expressions ">

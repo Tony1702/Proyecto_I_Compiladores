@@ -84,7 +84,10 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopCommand;
-
+import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
+import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
+import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 public class LayoutVisitor implements Visitor {
 
   private final int BORDER = 5;
@@ -124,6 +127,19 @@ public class LayoutVisitor implements Visitor {
   public Object visitWhileCommand(WhileCommand ast, Object obj) {
     return layoutBinary("WhileCom.", ast.E, ast.C);
   }
+ 
+    public Object visitLoopWhileCommand(LoopWhileCommand ast, Object o) {
+        return layoutBinary("LoopWhileCom", ast.E, ast.C);
+    }
+   public Object visitLoopUntilCommand(LoopUntilCommand ast, Object o){
+       return layoutBinary("LoopUntilCom", ast.E, ast.C);
+   }
+   public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object obj) {
+       return layoutBinary("LoopDoUntilCom.", ast.C, ast.E);
+    }
+   public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object obj) {
+       return layoutBinary("LoopDoWhileCom.", ast.C, ast.E);
+    }
 
   //nuevo command
   //cambiar el parámetro a LoopCommand cuando esté listo
@@ -566,5 +582,14 @@ public class LayoutVisitor implements Visitor {
     public Object visitElseCommand(ElseCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public Object visitLoopCommand(LoopCommand ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+
+    
 
 }
