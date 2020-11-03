@@ -397,6 +397,7 @@ public class Parser {
                     commandAST = new LoopDoUntilCommand(cAST, eAST, commandPos);
                     break;
                 }
+                break;
             }
             case Token.UNTIL:{
                 acceptIt();
