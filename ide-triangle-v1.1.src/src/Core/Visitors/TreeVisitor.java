@@ -76,6 +76,7 @@ import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopForCommand;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -140,6 +141,9 @@ public class TreeVisitor implements Visitor {
     }
     public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object obj){
         return(createBinary("Loop Do While Command", ast.E, ast.C));
+    }
+    public Object visitLoopForCommand(LoopForCommand ast, Object obj){
+        return(createQuaternary("Loop For Command", ast.I, ast.E1, ast.E2, ast.C));
     }
     // </editor-fold>
     

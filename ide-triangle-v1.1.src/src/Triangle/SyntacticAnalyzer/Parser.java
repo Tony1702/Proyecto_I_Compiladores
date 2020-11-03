@@ -53,6 +53,7 @@ import Triangle.AbstractSyntaxTrees.LetCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopForCommand;
 import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
 import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
@@ -407,6 +408,20 @@ public class Parser {
                 accept(Token.END);
                 finish(commandPos);
                 commandAST = new LoopUntilCommand(eAST, cAST, commandPos);
+                break;
+            }
+            case Token.FOR:{
+                accept(Token.FOR);
+                Identifier iAST = parseIdentifier();
+                accept(Token.BECOMES);
+                Expression e1AST = parseExpression();
+                accept(Token.TO);
+                Expression e2AST = parseExpression();
+                accept(Token.DO);
+                Command cAST = parseCommand();
+                accept(Token.END);
+                finish(commandPos);
+                commandAST = new LoopForCommand(iAST, e1AST, e2AST, cAST, commandPos);
                 break;
             }
         }

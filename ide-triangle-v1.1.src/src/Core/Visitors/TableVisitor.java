@@ -42,6 +42,7 @@ import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopForCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
 import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
@@ -171,6 +172,14 @@ public class TableVisitor implements Visitor {
   
   public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object o){
       ast.E.visit(this, null);
+      ast.C.visit(this, null);
+      return (null);
+  }
+  
+  public Object visitLoopForCommand(LoopForCommand ast, Object o){
+      ast.I.visit(this, null);
+      ast.E1.visit(this, null);
+      ast.E2.visit(this, null);
       ast.C.visit(this, null);
       return (null);
   }

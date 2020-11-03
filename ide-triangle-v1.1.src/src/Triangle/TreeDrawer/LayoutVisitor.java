@@ -88,6 +88,7 @@ import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
+import Triangle.AbstractSyntaxTrees.LoopForCommand;
 public class LayoutVisitor implements Visitor {
 
   private final int BORDER = 5;
@@ -139,6 +140,10 @@ public class LayoutVisitor implements Visitor {
     }
    public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object obj) {
        return layoutBinary("LoopDoWhileCom.", ast.C, ast.E);
+    }
+   
+   public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
+        return layoutQuaternary("LoopForCom.", aThis.I, aThis.E1, aThis.E2, aThis.C);  
     }
 
   //nuevo command
@@ -587,9 +592,5 @@ public class LayoutVisitor implements Visitor {
     public Object visitLoopCommand(LoopCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    
-
-    
 
 }
