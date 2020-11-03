@@ -302,22 +302,6 @@ public class Parser {
       }
       break;
 
-//    case Token.BEGIN:
-//      acceptIt();
-//      commandAST = parseCommand();
-//      accept(Token.END);
-//      break;
-
-//    case Token.LET:
-//    {
-//      acceptIt();
-//      Declaration dAST = parseDeclaration();
-//      accept(Token.IN);
-//      Command cAST = parseSingleCommand();
-//      finish(commandPos);
-//      commandAST = new LetCommand(dAST, cAST, commandPos);  
-//    }
-//    break;
       
     case Token.LET:
       {
@@ -343,17 +327,7 @@ public class Parser {
         commandAST = new IfCommand(e1AST, c1AST, c2AST,commandPos);
       }
       break;
-      
-//    case Token.ELSE:
-//      {
-//        acceptIt();
-//        Command cAST = parseCommand();
-//        accept(Token.END);
-//        finish(commandPos);
-//        commandAST = new ElseCommand(cAST, commandPos);
-//      }
-//      break;
-      
+        
     case Token.SELECT:
       {
         acceptIt();
@@ -427,19 +401,13 @@ public class Parser {
         }
         return commandAST;
       }
+    case Token.SKIP:{
+        acceptIt();
+        finish(commandPos);
+        commandAST = new EmptyCommand(commandPos);
+        break;
+    }
       
-    
-//    case Token.WHILE:
-//      {
-//        acceptIt();
-//        Expression eAST = parseExpression();
-//        accept(Token.DO);
-//        Command cAST = parseSingleCommand();
-//        finish(commandPos);
-//        commandAST = new WhileCommand(eAST, cAST, commandPos);
-//      }
-//      break;
-
     case Token.SEMICOLON:
     case Token.END:
     case Token.IN:
