@@ -691,8 +691,10 @@ public class Parser {
     Declaration declarationAST = null; // in case there's a syntactic error
 
     SourcePosition declarationPos = new SourcePosition();
+    
     start(declarationPos);
-    declarationAST = parseSingleDeclaration();
+    //declarationAST = parseSingleDeclaration();
+    declarationAST = parseCompoundDeclaration();
     while (currentToken.kind == Token.SEMICOLON) {
       acceptIt();
       //Declaration dAST = parseSingleDeclaration();
@@ -800,13 +802,12 @@ public class Parser {
 
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
-
     switch (currentToken.kind) {
           
 //    case Token.RECURSIVE:
 //        {
 //          acceptIt();
-//          Proc-Funcs pfsAST = parseProc-Funcs(); //falta crear las reglas proc-funcs y proc-func
+//          Proc-Funcs pfsAST = parseProc-Funcs(); //falta crear las reglas proc-funcs
 //          accept(Token.END);
 //          finish(declarationPos);
 //          declarationAST = new ConstDeclaration(pfsAST, declarationPos);
@@ -816,20 +817,18 @@ public class Parser {
     case Token.LOCAL:
         {
           acceptIt();
-          Declaration dAST = parseDeclaration();
-          accept(Token.IN);
           Declaration d2AST = parseDeclaration();
+          accept(Token.IN);
+          Declaration d3AST = parseDeclaration();
           accept(Token.END);
           finish(declarationPos);
-          declarationAST = new ConstDeclaration(dAST, d2AST, declarationPos);
+          declarationAST = new ConstDeclaration(d2AST, d3AST, declarationPos);
         }
         break;
         
     default:
-      syntacticError("\"%\" cannot start a declaration",
-        currentToken.spelling);
+      declarationAST = parseSingleDeclaration();
       break;
-
     }
     return declarationAST;
   }
