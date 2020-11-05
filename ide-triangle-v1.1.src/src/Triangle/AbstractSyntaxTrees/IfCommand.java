@@ -25,20 +25,10 @@ public class IfCommand extends Command {
     C1 = c1AST;
     C2 = c2AST;
   }
-  
-  public IfCommand (Expression e1AST, Command c1AST, Command c2AST, Expression e2AST,
-                    SourcePosition thePosition) {
-    super (thePosition);
-    E1 = e1AST;
-    E2 = e2AST;
-    C1 = c1AST;
-    C2 = c2AST;
-  }
-
   public Object visit(Visitor v, Object o) {
     return v.visitIfCommand(this, o);
   }
 
-  public Expression E, E1, E2;
+  public Expression E;
   public Command C1, C2;
 }

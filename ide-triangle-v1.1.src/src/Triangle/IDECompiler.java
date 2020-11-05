@@ -14,6 +14,7 @@ import Triangle.SyntacticAnalyzer.Parser;
 import Triangle.ContextualAnalyzer.Checker;
 import Triangle.CodeGenerator.Encoder;
 import Triangle.SyntacticAnalyzer.HtmlWriter;
+import Triangle.SyntacticAnalyzer.XMLWriter;
 
 
 
@@ -73,6 +74,8 @@ public class IDECompiler {
             System.out.println("Compilation was successful.");
             HtmlWriter fileWriter =  new HtmlWriter(sourceName);
             fileWriter.write(scanner.getHtmlContent());
+            XMLWriter xml = new XMLWriter(sourceName);
+            xml.writeFile(rootAST);
         }
         else
             System.out.println("Compilation was unsuccessful.");

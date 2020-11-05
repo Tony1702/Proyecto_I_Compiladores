@@ -88,33 +88,53 @@ import java.util.logging.Logger;
  */
 public class XMLWriter implements Visitor{
     private FileWriter fileWriter;
+    private String fileName;
     public XMLWriter(String filename){
-        filename.replace(".tri", ".xml");
+        this.fileName = filename.replace(".tri", ".xml");
         try {
-            fileWriter = new FileWriter(filename);
+            fileWriter = new FileWriter(this.fileName);
+            
         } catch (IOException ex) {
             Logger.getLogger(XMLWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    @Override
+    public void writeFile(Program ast){
+        writeLine("<?xml version=\"1.0\" standalone=\"yes\"?>\n");
+        ast.visit(this, null);
+        try {
+            fileWriter.close();
+        } catch (IOException ex) {
+            Logger.getLogger(XMLWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public Object visitAssignCommand(AssignCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<AssignCommand>");
+        ast.V.visit(this, null);
+        ast.E.visit(this, null);
+        writeLine("</AssignCommand>");
+        return null;
     }
 
-    @Override
     public Object visitCallCommand(CallCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<CallCommand>");
+        ast.I.visit(this, null);
+        ast.APS.visit(this, null);
+        writeLine("</CallCommand>");
+        return null;
     }
 
-    @Override
     public Object visitEmptyCommand(EmptyCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<EmptyCommand/>");
+        return null;
     }
 
-    @Override
     public Object visitIfCommand(IfCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<IfCommand>");
+        ast.E.visit(this, null);
+        ast.C1.visit(this, null);
+        ast.C2.visit(this, null);
+        writeLine("</IfCommand>");
+        return null;
     }
 
     @Override
@@ -122,14 +142,20 @@ public class XMLWriter implements Visitor{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
     public Object visitLetCommand(LetCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<LetCommand>");
+        ast.D.visit(this, null);
+        ast.C.visit(this, null);
+        writeLine("</LetCommand>");
+        return null;
     }
 
-    @Override
     public Object visitSequentialCommand(SequentialCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<SequentialCommand>");
+        ast.C1.visit(this, null);
+        ast.C2.visit(this, null);
+        writeLine("</SequentialCommand>");
+        return null;
     }
 
     @Override
@@ -142,124 +168,200 @@ public class XMLWriter implements Visitor{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
     public Object visitLoopWhileCommand(LoopWhileCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<LoopWhileCommand>");
+        ast.E.visit(this, null);
+        ast.C.visit(this, null);
+        writeLine("</LoopWhileCommand>");
+        return null;
     }
 
-    @Override
     public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<LoopDoUntilCommand>");
+        ast.C.visit(this, null);
+        ast.E.visit(this, null);
+        writeLine("</LoopDoUntilCommand>");
+        return null;
     }
 
-    @Override
     public Object visitLoopUntilCommand(LoopUntilCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<LoopUntilCommand>");
+        ast.E.visit(this, null);
+        ast.C.visit(this, null);
+        writeLine("</LoopUntilCommand>");
+        return null;
     }
 
-    @Override
     public Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<LoopDoWhileCommand>");
+        aThis.C.visit(this, null);
+        aThis.E.visit(this, null);
+        writeLine("</LoopDoWhileCommand>");
+        return null;
     }
 
-    @Override
     public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<LoopForCommand>");
+        aThis.I.visit(this, null);
+        aThis.E1.visit(this, null);
+        aThis.E2.visit(this, null);
+        aThis.C.visit(this, this);
+        writeLine("</LoopForCommand>");
+        return null;
     }
 
-    @Override
     public Object visitArrayExpression(ArrayExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<ArrayExpression>");
+        ast.AA.visit(this, null);
+        writeLine("</ArrayExpression>");
+        return null;
     }
 
-    @Override
     public Object visitBinaryExpression(BinaryExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<BinaryExpression>");
+        ast.E1.visit(this, null);
+        ast.O.visit(this, null);
+        ast.E2.visit(this, null);
+        writeLine("</BinaryExpression>");
+        return null;
     }
 
-    @Override
     public Object visitCallExpression(CallExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<CallExpression>");
+        ast.I.visit(this, null);
+        ast.APS.visit(this, null);
+        writeLine("</CallExpression>");
+        return null;
     }
 
-    @Override
     public Object visitCharacterExpression(CharacterExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<CharacterExpression>");
+        ast.CL.visit(this, null);
+        writeLine("</CharacterExpression>");
+        return null;
     }
 
-    @Override
     public Object visitEmptyExpression(EmptyExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<EmptyExpression>");
+        return null;
     }
 
-    @Override
     public Object visitIfExpression(IfExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<IfExpression>");
+        ast.E1.visit(this, null);
+        ast.E2.visit(this, null);
+        ast.E3.visit(this, null);
+        writeLine("</IfExpression>");
+        return null;
     }
 
-    @Override
     public Object visitIntegerExpression(IntegerExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<IntegerExpression>");
+        ast.IL.visit(this, null);
+        writeLine("</IntegerExpression>");
+        return null;
     }
 
-    @Override
+
     public Object visitLetExpression(LetExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<LetExpression>");
+        ast.D.visit(this, null);
+        ast.E.visit(this, null);
+        writeLine("</LetExpression>");
+        return null;
     }
 
-    @Override
     public Object visitRecordExpression(RecordExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        writeLine("<RecordExpression>");
+        ast.RA.visit(this, null);
+        writeLine("</RecordExpression>");
+        return null;
     }
 
-    @Override
-    public Object visitUnaryExpression(UnaryExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitUnaryExpression(UnaryExpression ast, Object obj) {
+        writeLine("<UnaryExpression>");
+        ast.O.visit(this, null);
+        ast.E.visit(this, null);
+        writeLine("</UnaryExpression>");
+        return null;
     }
 
-    @Override
-    public Object visitVnameExpression(VnameExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitVnameExpression(VnameExpression ast, Object obj) {
+        writeLine("<VnameExpression>");
+        ast.V.visit(this, null);
+        writeLine("</VnameExpression>");
+        return null;
     }
 
-    @Override
-    public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    // Declarations
+    public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object obj) {
+        writeLine("<BinaryOperatorDeclaration>");
+        ast.O.visit(this, null);
+        ast.ARG1.visit(this, null);
+        ast.ARG2.visit(this, null);
+        ast.RES.visit(this, null);
+        writeLine("</BinaryOperatorDeclaration>");
+        return null;
     }
 
-    @Override
-    public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitConstDeclaration(ConstDeclaration ast, Object obj) {
+        writeLine("<ConstDeclaration>");
+        ast.I.visit(this, null);
+        ast.E.visit(this, null);
+        writeLine("</ConstDeclaration>");
+        return null;
     }
 
-    @Override
-    public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitFuncDeclaration(FuncDeclaration ast, Object obj) {
+        writeLine("<FuncDeclaration>");
+        ast.I.visit(this, null);
+        ast.FPS.visit(this, null);
+        ast.T.visit(this, null);
+        ast.E.visit(this, null);
+        writeLine("</FuncDeclaration>");
+        return null;
     }
 
-    @Override
-    public Object visitProcDeclaration(ProcDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitProcDeclaration(ProcDeclaration ast, Object obj) {
+        writeLine("<ProcDeclaration>");
+        ast.I.visit(this, null);
+        ast.FPS.visit(this, null);
+        ast.C.visit(this, null);
+        writeLine("</ProcDeclaration>");
+        return null;
     }
 
-    @Override
-    public Object visitSequentialDeclaration(SequentialDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
+        writeLine("<SequentialDeclaration>");
+        ast.D1.visit(this, null);
+        ast.D2.visit(this, null);
+        writeLine("</SequentialDeclaration>");
+        return null;
     }
 
-    @Override
-    public Object visitTypeDeclaration(TypeDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitTypeDeclaration(TypeDeclaration ast, Object obj) {
+        writeLine("<TypeDeclaration>");
+        ast.I.visit(this, null);
+        ast.T.visit(this, null);
+        writeLine("</TypeDeclaration>");
+        return null;
     }
 
-    @Override
-    public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object obj) {
+        writeLine("<UnaryOperatorDeclaration>");
+        ast.O.visit(this, null);
+        ast.ARG.visit(this, null);
+        ast.RES.visit(this, null);
+        writeLine("</UnaryOperatorDeclaration>");
+        return null;
     }
 
-    @Override
-    public Object visitVarDeclaration(VarDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitVarDeclaration(VarDeclaration ast, Object obj) {
+        writeLine("<VarDeclaration>");
+        ast.I.visit(this, null);
+        ast.T.visit(this, null);
+        writeLine("</VarDeclaration>");
+        return null;
     }
 
     @Override
@@ -272,183 +374,265 @@ public class XMLWriter implements Visitor{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object obj) {
+        writeLine("<MultipleArrayAggregate>");
+        ast.E.visit(this, null);
+        ast.AA.visit(this, null);
+        writeLine("</MultipleArrayAggregate>");
+        return null;
     }
 
-    @Override
-    public Object visitSingleArrayAggregate(SingleArrayAggregate ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitSingleArrayAggregate(SingleArrayAggregate ast, Object obj) {
+        writeLine("<SingleArrayAggregate>");
+        ast.E.visit(this, null);
+        writeLine("</SingleArrayAggregate>");
+        return null;
     }
 
-    @Override
-    public Object visitMultipleRecordAggregate(MultipleRecordAggregate ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitMultipleRecordAggregate(MultipleRecordAggregate ast, Object obj) {
+        writeLine("<MultipleRecordAggregate>");
+        ast.I.visit(this, null);
+        ast.E.visit(this, null);
+        ast.RA.visit(this, null);
+        writeLine("</MultipleRecordAggregate>");
+        return null;
     }
 
-    @Override
-    public Object visitSingleRecordAggregate(SingleRecordAggregate ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitSingleRecordAggregate(SingleRecordAggregate ast, Object obj) {
+        writeLine("<SingleRecordAggregate>");
+        ast.I.visit(this, null);
+        ast.E.visit(this, null);
+        writeLine("</SingleRecordAggregate>");
+        return null;
     }
 
-    @Override
-    public Object visitConstFormalParameter(ConstFormalParameter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitConstFormalParameter(ConstFormalParameter ast, Object obj) {
+        writeLine("<ConstFormalParameter>");
+        ast.I.visit(this, null);
+        ast.T.visit(this, null);
+        writeLine("</ConstFormalParameter>");
+        return null;
     }
 
-    @Override
-    public Object visitFuncFormalParameter(FuncFormalParameter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitFuncFormalParameter(FuncFormalParameter ast, Object obj) {
+        writeLine("<FuncFormalParameter>");
+        ast.I.visit(this, null);
+        ast.FPS.visit(this, null);
+        ast.T.visit(this, null);
+        writeLine("<FuncFormalParameter>");
+        return null;
     }
 
-    @Override
-    public Object visitProcFormalParameter(ProcFormalParameter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitProcFormalParameter(ProcFormalParameter ast, Object obj) {
+        writeLine("<ProcFormalParameter>");
+        ast.I.visit(this, null);
+        ast.FPS.visit(this, null);
+        writeLine("</ProcFormalParameter>");
+        return null;
     }
 
-    @Override
-    public Object visitVarFormalParameter(VarFormalParameter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitVarFormalParameter(VarFormalParameter ast, Object obj) {
+        writeLine("<VarFormalParameter>");
+        ast.I.visit(this, null);
+        ast.T.visit(this, null);
+        writeLine("</VarFormalParameter>");
+        return null;
     }
 
-    @Override
-    public Object visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Object obj) {
+        writeLine("<EmptyFormalParameterSequence/>");
+        return null;
     }
 
-    @Override
-    public Object visitMultipleFormalParameterSequence(MultipleFormalParameterSequence ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitMultipleFormalParameterSequence(MultipleFormalParameterSequence ast, Object obj) {
+        writeLine("<MultipleFormalParameterSequence>");
+        ast.FP.visit(this, null);
+        ast.FPS.visit(this, null);
+        writeLine("</MultipleFormalParameterSequence>");
+        return null;
     }
 
-    @Override
-    public Object visitSingleFormalParameterSequence(SingleFormalParameterSequence ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitSingleFormalParameterSequence(SingleFormalParameterSequence ast, Object obj) {
+        writeLine("<SingleFormalParameterSequence>");
+        ast.FP.visit(this, null);
+        writeLine("</SingleFormalParameterSequence>");
+        return null;
     }
 
-    @Override
-    public Object visitConstActualParameter(ConstActualParameter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public Object visitConstActualParameter(ConstActualParameter ast, Object obj) {
+        writeLine("<ConstActualParameter>");
+        ast.E.visit(this, null);
+        writeLine("</ConstActualParameter>");
+        return null;
     }
 
-    @Override
-    public Object visitFuncActualParameter(FuncActualParameter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitFuncActualParameter(FuncActualParameter ast, Object obj) {
+        writeLine("<FuncActualParameter>");
+        ast.I.visit(this, null);
+        writeLine("</FuncActualParameter>");
+        return null;
     }
 
-    @Override
-    public Object visitProcActualParameter(ProcActualParameter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitProcActualParameter(ProcActualParameter ast, Object obj) {
+        writeLine("<ProcActualParameter>");
+        ast.I.visit(this, null);
+        writeLine("</ProcActualParameter>");
+        return null;
     }
 
-    @Override
-    public Object visitVarActualParameter(VarActualParameter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitVarActualParameter(VarActualParameter ast, Object obj) {
+        writeLine("<VarActualParameter>");
+        ast.V.visit(this, null);
+        writeLine("</VarActualParameter>");
+        return null;
     }
 
-    @Override
-    public Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object obj) {
+        writeLine("<EmptyActualParameterSequence/>");
+        return null;
     }
 
-    @Override
-    public Object visitMultipleActualParameterSequence(MultipleActualParameterSequence ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitMultipleActualParameterSequence(MultipleActualParameterSequence ast, Object obj) {
+        writeLine("<MultipleActualParameterSequence>");
+        ast.AP.visit(this, null);
+        ast.APS.visit(this, null);
+        writeLine("</MultipleActualParameterSequence>");
+        return null;
     }
 
-    @Override
-    public Object visitSingleActualParameterSequence(SingleActualParameterSequence ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitSingleActualParameterSequence(SingleActualParameterSequence ast, Object obj) {
+        writeLine("<SingleActualParameterSequence>");
+        ast.AP.visit(this, null);
+        writeLine("</SingleActualParameterSequence>");
+        return null;
     }
 
-    @Override
-    public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    // Type Denoters
+    public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object obj) {
+        writeLine("<AnyTypeDenoter/>");
+        return null;
     }
 
-    @Override
-    public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object obj) {
+        writeLine("<ArrayTypeDenoter>");
+        ast.IL.visit(this, null);
+        ast.T.visit(this, null);
+        writeLine("</ArrayTypeDenoter>");
+        return null;
     }
 
-    @Override
-    public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object obj) {
+        writeLine("<BoolTypeDenoter/>");
+        return null;
     }
 
-    @Override
-    public Object visitCharTypeDenoter(CharTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitCharTypeDenoter(CharTypeDenoter ast, Object obj) {
+        writeLine("<CharTypeDenoter/>");
+        return null;
     }
 
-    @Override
-    public Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object obj) {
+        writeLine("<ErrorTypeDenoter/>");
+        return null;
     }
 
-    @Override
-    public Object visitSimpleTypeDenoter(SimpleTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitSimpleTypeDenoter(SimpleTypeDenoter ast, Object obj) {
+        writeLine("<SimpleTypeDenoter>");
+        ast.I.visit(this, null);
+        writeLine("</SimpleTypeDenoter>");
+        return null;
     }
 
-    @Override
-    public Object visitIntTypeDenoter(IntTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitIntTypeDenoter(IntTypeDenoter ast, Object obj) {
+        writeLine("<IntTypeDenoter/>");
+        return null;
     }
 
-    @Override
-    public Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object obj) {
+        writeLine("<RecordTypeDenoter>");
+        ast.FT.visit(this, null);
+        writeLine("</RecordTypeDenoter>");
+        return null;
     }
 
-    @Override
-    public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object obj) {
+        writeLine("<MultipleFieldTypeDenoter>");
+        ast.I.visit(this, null);
+        ast.T.visit(this, null);
+        ast.FT.visit(this, null);
+        writeLine("</MultipleFieldTypeDenoter>");
+        return null;
     }
 
-    @Override
-    public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Object obj) {
+        writeLine("<SingleFieldTypeDenoter>");
+        ast.I.visit(this, null);
+        ast.T.visit(this, null);
+        writeLine("</SingleFieldTypeDenoter>");
+        return null;
     }
 
-    @Override
-    public Object visitCharacterLiteral(CharacterLiteral ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       public Object visitCharacterLiteral(CharacterLiteral ast, Object obj) {
+        writeLine("<CharacterLiteral value=\"" + ast.spelling + "\"/>");
+        return null;
     }
 
-    @Override
-    public Object visitIdentifier(Identifier ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitIdentifier(Identifier ast, Object obj) {
+        writeLine("<Identifier value=\"" + ast.spelling + "\"/>");
+        return null;
     }
 
-    @Override
-    public Object visitIntegerLiteral(IntegerLiteral ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitIntegerLiteral(IntegerLiteral ast, Object obj) {
+        writeLine("<IntegerLiteral value=\"" + ast.spelling + "\"/>");
+        return null;
     }
 
-    @Override
-    public Object visitOperator(Operator ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitOperator(Operator ast, Object obj) {
+        String s = ast.spelling;
+        s.replace("<", "&#60;");
+        s.replace(">", "&#62;");
+        writeLine("<Operator value=\"" + s + "\"/>");
+        return null;
     }
 
-    @Override
-    public Object visitDotVname(DotVname ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitDotVname(DotVname ast, Object obj) {
+        writeLine("<DotVname>");
+        ast.V.visit(this, null);
+        ast.I.visit(this, null);
+        writeLine("</DotVname>");
+        return null;
     }
 
-    @Override
-    public Object visitSimpleVname(SimpleVname ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitSimpleVname(SimpleVname ast, Object obj) {
+        writeLine("<SimpleVname>");
+        ast.I.visit(this, null);
+        writeLine("</SimpleVname>");
+        return null;
     }
 
-    @Override
-    public Object visitSubscriptVname(SubscriptVname ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitSubscriptVname(SubscriptVname ast, Object obj) {
+        writeLine("<SubscriptVname>");
+        ast.V.visit(this, null);
+        ast.E.visit(this, null);
+        writeLine("</SubscriptVname>");
+        return null;
     }
 
-    @Override
-    public Object visitProgram(Program ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    // Programs
+    public Object visitProgram(Program ast, Object obj) {
+        writeLine("<Program>");
+        ast.C.visit(this, null);
+        writeLine("</Program>");
+        return null;
+    }
+    public void writeLine(String line){
+        try {
+            fileWriter.write(line);
+            fileWriter.write("\n");
+        } catch (IOException ex) {
+            Logger.getLogger(XMLWriter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 }
