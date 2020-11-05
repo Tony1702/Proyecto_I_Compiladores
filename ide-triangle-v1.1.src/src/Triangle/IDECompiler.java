@@ -13,6 +13,7 @@ import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.SyntacticAnalyzer.Parser;
 import Triangle.ContextualAnalyzer.Checker;
 import Triangle.CodeGenerator.Encoder;
+import Triangle.SyntacticAnalyzer.HtmlWriter;
 
 
 
@@ -68,8 +69,11 @@ public class IDECompiler {
             }
         }
 
-        if (success)
+        if (success){
             System.out.println("Compilation was successful.");
+            HtmlWriter fileWriter =  new HtmlWriter(sourceName);
+            fileWriter.write(scanner.getHtmlContent());
+        }
         else
             System.out.println("Compilation was unsuccessful.");
         
