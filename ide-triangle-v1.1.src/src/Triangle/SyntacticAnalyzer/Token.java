@@ -184,11 +184,20 @@ final class Token extends Object {
   private final static int	firstReservedWord = Token.ARRAY,
   				lastReservedWord  = Token.WHILE;
     public static boolean isReservedWord(String token){
-        for(int i=4; i<32; i++){
-            if(tokenTable[i] == token){
+        for(int i=4; i<=32; i++){
+            if(tokenTable[i].equals(token)){
                 return true;
             }
         }
         return false;
+    }
+    public static boolean isSymbol(String token){
+        int i=4;
+        for(; i<46; i++){
+            if(tokenTable[i].equals(token)){
+                break;
+            }
+        }
+        return i>32;
     }
 }

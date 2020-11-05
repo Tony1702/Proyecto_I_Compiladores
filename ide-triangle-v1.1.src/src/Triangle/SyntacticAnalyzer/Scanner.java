@@ -130,7 +130,7 @@ public final class Scanner {
                 while (isLetter(currentChar) || isDigit(currentChar)) {
                     takeIt();
                 }
-                addHtmlIdentifier();
+                addHtmlIdentifier(false);
                 return Token.IDENTIFIER;
 
             case '0': case '1': case '2': case '3': case '4':
@@ -149,7 +149,7 @@ public final class Scanner {
                 while (isOperator(currentChar)) {
                     takeIt();
                 }
-                addHtmlIdentifier();
+                addHtmlIdentifier(true);
                 return Token.OPERATOR;
 
             case '\'':
@@ -157,7 +157,7 @@ public final class Scanner {
                 takeIt(); // the quoted character
                 if (currentChar == '\'') {
                     takeIt();
-                    addHtmlLiteral();
+                    addHtmlIdentifier(true);
                     return Token.CHARLITERAL;
                 } else {
                     return Token.ERROR;
@@ -165,63 +165,63 @@ public final class Scanner {
 
             case '.':
                 takeIt();
-                addHtmlLiteral();
+                addHtmlIdentifier(true);
                 return Token.DOT;
 
             case ':':
                 takeIt();
                 if (currentChar == '=') {
                     takeIt();
-                    addHtmlLiteral();
+                    addHtmlIdentifier(true);
                     return Token.BECOMES;
                 } else {
-                    addHtmlLiteral();
+                    addHtmlIdentifier(true);
                     return Token.COLON;
                 }
 
             case ';':
                 takeIt();
-                addHtmlLiteral();
+                addHtmlIdentifier(true);
                 return Token.SEMICOLON;
 
             case ',':
                 takeIt();
-                addHtmlLiteral();
+                addHtmlIdentifier(true);
                 return Token.COMMA;
 
             case '~':
                 takeIt();
-                addHtmlLiteral();
+                addHtmlIdentifier(true);
                 return Token.IS;
 
             case '(':
                 takeIt();
-                addHtmlLiteral();
+                addHtmlIdentifier(true);
                 return Token.LPAREN;
 
             case ')':
                 takeIt();
-                addHtmlLiteral();
+                addHtmlIdentifier(true);
                 return Token.RPAREN;
 
             case '[':
                 takeIt();
-                addHtmlLiteral();
+                addHtmlIdentifier(true);
                 return Token.LBRACKET;
 
             case ']':
                 takeIt();
-                addHtmlLiteral();
+                addHtmlIdentifier(true);
                 return Token.RBRACKET;
 
             case '{':
                 takeIt();
-                addHtmlLiteral();
+                addHtmlIdentifier(true);
                 return Token.LCURLY;
 
             case '}':
                 takeIt();
-                addHtmlLiteral();
+                addHtmlIdentifier(true);
                 return Token.RCURLY;
 
             case SourceFile.EOT:
@@ -266,27 +266,28 @@ public final class Scanner {
         return htmlContent;
     }
 
-    private void addHtmlReservedWord() {
-        htmlContent += "<FONT FACE= \"monospace\" SIZE =3 COLOR=#000000><strong>" + htmlSpaces + currentSpelling.toString() + "</strong></FONT>";
+    private void addHtmlReservedWord(){
+        
+        htmlContent += "<p style=\"padding-left:1em; \n padding-right:1em\"><b>" + htmlSpaces + currentSpelling.toString() + "</p></b>";
         htmlSpaces = "";
-        counter++;
-
+        counter++;   
+        
     }
 
-    private void addHtmlIdentifier() {
+    private void addHtmlIdentifier(boolean isSymbol) {
         String token = currentSpelling.toString();
         if (Token.isReservedWord(token)) {
             addHtmlReservedWord();
         } else {
-            htmlContent += "<FONT FACE= \"monospace\" SIZE =3 COLOR=#000000>" + htmlSpaces + token + "</FONT>";
+            htmlContent += "<p>" + htmlSpaces + currentSpelling.toString() + "</p>";
             htmlSpaces = "";
-            counter++;
+            counter++; 
         }
     }
 
     //agrega texto con formato para las literales
     private void addHtmlLiteral() {
-        htmlContent += "<FONT FACE= \"monospace\" SIZE =3 COLOR=#000099>" + htmlSpaces + currentSpelling.toString() + "</FONT>";
+        htmlContent += "<p style=\"color:Blue;\">" + htmlSpaces + currentSpelling.toString() + "</p>";
         htmlSpaces = "";
         counter++;
     }
@@ -297,7 +298,7 @@ public final class Scanner {
     //agrega texto con formato para las comentarios
 
     private void addHtmlComment() {
-        htmlContent += "<FONT FACE= \"monospace\" SIZE =3 COLOR=#008000>" + htmlSpaces + htmlComment + "</FONT>";
+        htmlContent += "<p style=\"color:ForestGreen; padding-left:1em;\">" + htmlSpaces + htmlComment + "</p>";
         htmlComment = "";
         htmlSpaces = "";
         counter++;
@@ -305,7 +306,7 @@ public final class Scanner {
 
     //agrega los espacios que se van acumulando cuando se lee
     private void addHtmlSpace() {
-        htmlContent += "<FONT FACE= \"monospace\" SIZE =3 COLOR=#000000>" + htmlSpaces + currentSpelling.toString() + "</FONT>";
+        htmlContent += "<p color ='#00b300'>" + htmlSpaces + currentSpelling.toString() + "</p>";
         htmlSpaces = "";
         counter++;
     }

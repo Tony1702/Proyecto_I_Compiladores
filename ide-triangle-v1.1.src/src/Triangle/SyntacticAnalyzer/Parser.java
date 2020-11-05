@@ -408,14 +408,7 @@ public class Parser {
         break;
     }
       
-    case Token.SEMICOLON:
-    case Token.END:
-    case Token.IN:
-    case Token.EOT:
-
-      finish(commandPos);
-      commandAST = new EmptyCommand(commandPos);
-      break;
+    
 
     default:
       syntacticError("\"%\" cannot start a command",

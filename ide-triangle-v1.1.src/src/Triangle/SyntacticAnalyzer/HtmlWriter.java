@@ -22,7 +22,7 @@ public class HtmlWriter {
     public void write(String data){
         try {
             FileWriter fileWriter =  new FileWriter(fileName);
-            fileWriter.write("<html><body>" + data + "</body></html>");
+            fileWriter.write("<!DOCTYPE html><html><head><style>p{font-family: 'DejaVu Sans', monospace; \n display:inline;}</style></head><body> <p >" + data + "</p></body></html>");
             fileWriter.close();
         } catch (IOException ex) {
             Logger.getLogger(HtmlWriter.class.getName()).log(Level.SEVERE, null, ex);
