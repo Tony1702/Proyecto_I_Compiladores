@@ -84,6 +84,7 @@ import Triangle.CodeGenerator.UnknownAddress;
 import Triangle.CodeGenerator.UnknownRoutine;
 import Triangle.CodeGenerator.UnknownValue;
 import Triangle.AbstractSyntaxTrees.LoopCommand; //nuevo
+import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -352,6 +353,19 @@ public class TableVisitor implements Visitor {
       return(null);
   }
   
+    public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o){
+        try {
+      addIdentifier(aThis.I.spelling, 
+              "KnownAddress", 
+              (aThis.entity!=null?aThis.entity.size:0), 
+              ((KnownAddress)aThis.entity).address.level, 
+              ((KnownAddress)aThis.entity).address.displacement, 
+              -1);
+      } catch (NullPointerException e) { }
+      
+      aThis.E.visit(this, null);
+      return(null);
+    }
   // </editor-fold>
   
   // <editor-fold defaultstate="collapsed" desc=" Proc-Func ">
@@ -704,5 +718,4 @@ public class TableVisitor implements Visitor {
     public Object visitElseCommand(ElseCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }

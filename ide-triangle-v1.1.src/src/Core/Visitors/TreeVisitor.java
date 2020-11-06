@@ -77,6 +77,7 @@ import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopForCommand;
+import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -226,6 +227,10 @@ public class TreeVisitor implements Visitor {
     
     public Object visitVarDeclaration(VarDeclaration ast, Object obj) {
         return(createBinary("Variable Declaration", ast.I, ast.T));
+    }    
+    
+    public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o) {
+        return(createBinary("VariableInitializationDeclaration", aThis.I, aThis.E));
     }
     // </editor-fold>
     
@@ -483,6 +488,8 @@ public class TreeVisitor implements Visitor {
     public Object visitElseCommand(ElseCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+
 
 
 }

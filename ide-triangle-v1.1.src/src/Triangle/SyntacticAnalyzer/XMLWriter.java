@@ -74,6 +74,7 @@ import Triangle.AbstractSyntaxTrees.UnaryOperatorDeclaration;
 import Triangle.AbstractSyntaxTrees.VarActualParameter;
 import Triangle.AbstractSyntaxTrees.VarDeclaration;
 import Triangle.AbstractSyntaxTrees.VarFormalParameter;
+import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
 import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
@@ -363,7 +364,15 @@ public class XMLWriter implements Visitor{
         writeLine("</VarDeclaration>");
         return null;
     }
-
+    
+    public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o) {
+        writeLine("<VarExpressionDeclaration>");
+        aThis.I.visit(this, null);
+        aThis.E.visit(this, null);
+        writeLine("</VarExpressionDeclaration>");
+        return null;
+    }
+    
     @Override
     public Object visitProcProc_Func(ProcProc_Func ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -635,4 +644,6 @@ public class XMLWriter implements Visitor{
         }
         
     }
+
+    
 }

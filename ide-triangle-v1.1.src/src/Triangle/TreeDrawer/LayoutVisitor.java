@@ -89,6 +89,7 @@ import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopForCommand;
+import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
 public class LayoutVisitor implements Visitor {
 
   private final int BORDER = 5;
@@ -230,7 +231,10 @@ public class LayoutVisitor implements Visitor {
   public Object visitVarDeclaration(VarDeclaration ast, Object obj) {
     return layoutBinary("VarDecl.", ast.I, ast.T);
   }
-  
+    
+    public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o) {
+        return layoutBinary("VarExpDecl.", aThis.I, aThis.E);
+    }
   // Proc_Func
   @Override
  public Object visitProcProc_Func(ProcProc_Func ast, Object o) {
@@ -592,5 +596,6 @@ public class LayoutVisitor implements Visitor {
     public Object visitLoopCommand(LoopCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 
 }

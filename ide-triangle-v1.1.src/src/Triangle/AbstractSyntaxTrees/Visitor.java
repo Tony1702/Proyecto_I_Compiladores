@@ -30,7 +30,7 @@ public interface Visitor {
   public abstract Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o);
   public abstract Object visitLoopUntilCommand(LoopUntilCommand ast, Object o);
   public abstract Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o);
-  public Object visitLoopForCommand(LoopForCommand aThis, Object o);
+  public abstract Object visitLoopForCommand(LoopForCommand aThis, Object o);
   // Expressions
   public abstract Object visitArrayExpression(ArrayExpression ast, Object o);
   public abstract Object visitBinaryExpression(BinaryExpression ast, Object o);
@@ -53,7 +53,7 @@ public interface Visitor {
   public abstract Object visitTypeDeclaration(TypeDeclaration ast, Object o);
   public abstract Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o);
   public abstract Object visitVarDeclaration(VarDeclaration ast, Object o);
-  
+  public abstract Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o);
   // ProcFunction
   public abstract Object visitProcProc_Func(ProcProc_Func ast, Object o);
   public abstract Object visitFuncProc_Func(FuncProc_Func ast, Object o);
@@ -114,12 +114,6 @@ public interface Visitor {
 
   // Programs
   public abstract Object visitProgram(Program ast, Object o);
-
-    
-
-    
-
-    
 
     
 

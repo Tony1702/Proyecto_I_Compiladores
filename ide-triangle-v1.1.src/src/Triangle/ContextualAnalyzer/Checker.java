@@ -95,6 +95,7 @@ import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopForCommand;
 import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
+import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
 
 public final class Checker implements Visitor {
 
@@ -1010,6 +1011,11 @@ public final class Checker implements Visitor {
 
     @Override
     public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
