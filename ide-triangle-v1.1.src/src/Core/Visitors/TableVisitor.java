@@ -85,6 +85,7 @@ import Triangle.CodeGenerator.UnknownAddress;
 import Triangle.CodeGenerator.UnknownRoutine;
 import Triangle.CodeGenerator.UnknownValue;
 import Triangle.AbstractSyntaxTrees.LoopCommand; //nuevo
+import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
 import javax.swing.table.DefaultTableModel;
 
@@ -324,6 +325,13 @@ public class TableVisitor implements Visitor {
   }
   
   public Object visitSequentialDeclaration(SequentialDeclaration ast, Object o) {   
+      ast.D1.visit(this, null);
+      ast.D2.visit(this, null);
+      
+      return(null);
+  }
+
+  public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {   
       ast.D1.visit(this, null);
       ast.D2.visit(this, null);
       

@@ -44,6 +44,7 @@ import Triangle.AbstractSyntaxTrees.FuncActualParameter;
 import Triangle.AbstractSyntaxTrees.FuncDeclaration;
 import Triangle.AbstractSyntaxTrees.FuncFormalParameter;
 import Triangle.AbstractSyntaxTrees.FuncProc_Func;
+import Triangle.AbstractSyntaxTrees.Proc_Funcs;
 import Triangle.AbstractSyntaxTrees.Identifier;
 import Triangle.AbstractSyntaxTrees.IfCommand;
 import Triangle.AbstractSyntaxTrees.IfExpression;
@@ -71,6 +72,7 @@ import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordAggregate;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
+import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SimpleTypeDenoter;
@@ -798,15 +800,15 @@ public class Parser {
     start(declarationPos);
     switch (currentToken.kind) {
           
-//    case Token.RECURSIVE:
-//        {
-//          acceptIt();
-//          Proc-Funcs pfsAST = parseProc-Funcs(); //falta crear las reglas proc-funcs
-//          accept(Token.END);
-//          finish(declarationPos);
-//          declarationAST = new ConstDeclaration(pfsAST, declarationPos);
-//        }
-//        break;
+    case Token.RECURSIVE:
+        {
+          acceptIt();
+          declarationAST = parseProc_Funcs();
+          accept(Token.END);
+          finish(declarationPos);
+          
+        }
+        break;
     
     case Token.LOCAL:
         {
@@ -816,7 +818,7 @@ public class Parser {
           Declaration d3AST = parseDeclaration();
           accept(Token.END);
           finish(declarationPos);
-          declarationAST = new ConstDeclaration(d2AST, d3AST, declarationPos);
+          declarationAST = new SequentialDeclaration(d2AST, d3AST, declarationPos);
         }
         break;
         
@@ -833,8 +835,8 @@ public class Parser {
 //
 ///////////////////////////////////////////////////////////////////////////////  
 
-Proc_Func parseProcFunction() throws SyntaxError {
-    Proc_Func procFunctionAST = null; // in case there's a syntactic error
+Declaration parseProcFunction() throws SyntaxError {
+    Declaration procFunctionAST = null; // in case there's a syntactic error
     
     SourcePosition procFunctionPos = new SourcePosition();
     
@@ -853,7 +855,7 @@ Proc_Func parseProcFunction() throws SyntaxError {
         Command cAST = parseCommand();
         accept(Token.END);
         finish(procFunctionPos);
-        procFunctionAST = new ProcProc_Func(iAST, fpsAST, cAST, procFunctionPos);
+        procFunctionAST = new ProcDeclaration(iAST, fpsAST, cAST, procFunctionPos);
       }
       break;
 
@@ -869,7 +871,7 @@ Proc_Func parseProcFunction() throws SyntaxError {
         accept(Token.IS);
         Expression eAST = parseExpression();
         finish(procFunctionPos);
-        procFunctionAST = new FuncProc_Func(iAST, fpsAST, tAST, eAST, procFunctionPos);
+        procFunctionAST = new FuncDeclaration(iAST, fpsAST, tAST, eAST, procFunctionPos);
       }
       break;
 
@@ -881,6 +883,33 @@ Proc_Func parseProcFunction() throws SyntaxError {
     return procFunctionAST;
   }  
 
+//Proc_Funcs parser por Adrian Diaz
+Declaration parseProc_Funcs() throws SyntaxError {
+    
+    Declaration proc_FuncsAST = null; // in case there's a syntactic error
+    
+    SourcePosition proc_FuncsPos = new SourcePosition();
+    start (proc_FuncsPos);
+     
+    do
+    {
+      proc_FuncsAST = parseProcFunction();
+      if (currentToken.kind == Token.PIPE){
+         acceptIt();
+        Declaration d2AST = parseProcFunction();
+        finish(proc_FuncsPos);
+        Declaration RecAST = new RecursiveDeclaration(proc_FuncsAST, d2AST,
+        proc_FuncsPos);
+        
+        return RecAST;   
+      }
+
+    }
+    while (currentToken.kind == Token.PIPE);
+    
+    return proc_FuncsAST;
+    
+}
 //ProcFunctions parseProcFunctions() throws SyntaxError {
 //    ProcFunctions procFunctionsAST = null; // in case there's a syntactic error
 //    

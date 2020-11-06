@@ -78,6 +78,7 @@ import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopForCommand;
+import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -217,6 +218,10 @@ public class TreeVisitor implements Visitor {
     public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
         return(createBinary("Sequential Declaration", ast.D1, ast.D2));
     }
+    
+    public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object obj) {
+        return(createBinary("Recursive Declaration", ast.D1, ast.D2));
+    }    
     
     public Object visitTypeDeclaration(TypeDeclaration ast, Object obj) {
         return(createBinary("Type Declaration", ast.I, ast.T));

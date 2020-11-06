@@ -59,6 +59,7 @@ import Triangle.AbstractSyntaxTrees.Proc_Funcs;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
+import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SimpleTypeDenoter;
@@ -341,6 +342,14 @@ public class XMLWriter implements Visitor{
         return null;
     }
 
+    public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
+        writeLine("<RecursiveDeclaration>");
+        ast.D1.visit(this, null);
+        ast.D2.visit(this, null);
+        writeLine("</RecursiveDeclaration>");
+        return null;
+    }
+    
     public Object visitTypeDeclaration(TypeDeclaration ast, Object obj) {
         writeLine("<TypeDeclaration>");
         ast.I.visit(this, null);
@@ -650,6 +659,7 @@ public class XMLWriter implements Visitor{
         }
         
     }
+
 
     
 }

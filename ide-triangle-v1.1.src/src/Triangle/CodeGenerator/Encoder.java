@@ -99,6 +99,7 @@ import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopForCommand;
 import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
+import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
 
 public final class Encoder implements Visitor {
@@ -349,6 +350,8 @@ public final class Encoder implements Visitor {
     return new Integer(extraSize1 + extraSize2);
   }
 
+  
+  
   public Object visitTypeDeclaration(TypeDeclaration ast, Object o) {
     // just to ensure the type's representation is decided
     ast.T.visit(this, null);
@@ -1109,6 +1112,11 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitRecursiveDeclaration(RecursiveDeclaration aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
