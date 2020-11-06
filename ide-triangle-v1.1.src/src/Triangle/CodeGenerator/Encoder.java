@@ -69,6 +69,7 @@ import Triangle.AbstractSyntaxTrees.ProcActualParameter;
 import Triangle.AbstractSyntaxTrees.ProcDeclaration;
 import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
 import Triangle.AbstractSyntaxTrees.ProcProc_Func;
+import Triangle.AbstractSyntaxTrees.Proc_Funcs;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
@@ -372,14 +373,35 @@ public final class Encoder implements Visitor {
 
   
   // Proc-Func
+  //visitProc_Funcs por Adrian Diaz  
+  public Object visitProc_Funcs(Proc_Funcs ast, Object o) {
+      Frame frame = (Frame) o;
+      int jumpAddr = nextInstrAddr;
+      int argsSize = 0;
+      
+      emit(Machine.JUMPop, 0, Machine.CBr, 0);
+      ast.entity = new KnownRoutine (Machine.closureSize, frame.level, nextInstrAddr);
+      writeTableDetails(ast);
+      if (frame.level == Machine.maxRoutineLevel)
+        reporter.reportRestriction("can't nest routines so deeply");
+      else {
+          Frame frame1 = new Frame(frame.level + 1, 0);
+          ast.PF1.visit(this, frame1);
+          Frame frame2 = new Frame(frame.level + 1, Machine.linkDataSize);
+          ast.PF2.visit(this, frame2);
+      }   
+      emit(Machine.RETURNop, 0, 0, argsSize); //argsSize is correct?
+      patch(jumpAddr, nextInstrAddr);
+      return new Integer(0);
+  }
+  
   public Object visitProcProc_Func(ProcProc_Func ast, Object o) {
       Frame frame = (Frame) o;
     int jumpAddr = nextInstrAddr;
     int argsSize = 0;
 
     emit(Machine.JUMPop, 0, Machine.CBr, 0);
-    ast.entity = new KnownRoutine (Machine.closureSize, frame.level,
-                                nextInstrAddr);
+    ast.entity = new KnownRoutine (Machine.closureSize, frame.level, nextInstrAddr);
     writeTableDetails(ast);
     if (frame.level == Machine.maxRoutineLevel)
       reporter.reportRestriction("can't nest routines so deeply");

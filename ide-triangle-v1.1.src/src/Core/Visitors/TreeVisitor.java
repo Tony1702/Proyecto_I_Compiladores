@@ -49,6 +49,7 @@ import Triangle.AbstractSyntaxTrees.ProcActualParameter;
 import Triangle.AbstractSyntaxTrees.ProcDeclaration;
 import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
 import Triangle.AbstractSyntaxTrees.ProcProc_Func;
+import Triangle.AbstractSyntaxTrees.Proc_Funcs;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
@@ -242,6 +243,11 @@ public class TreeVisitor implements Visitor {
 
     public Object visitFuncProc_Func(FuncProc_Func ast, Object o) {
         return(createQuaternary("Function Declaration", ast.I, ast.FPS, ast.T, ast.E));
+    }
+    
+    //por Adrian Diaz
+    public Object visitProc_Funcs(Proc_Funcs ast, Object o)  {
+        return(createBinary("Proc Func",ast.PF1 ,ast.PF2));
     }
     // </editor-fold>
     

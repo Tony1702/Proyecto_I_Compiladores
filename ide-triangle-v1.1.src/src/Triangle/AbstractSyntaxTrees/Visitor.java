@@ -59,6 +59,7 @@ public interface Visitor {
   public abstract Object visitFuncProc_Func(FuncProc_Func ast, Object o);
   
   // ProcFunctions
+  public abstract Object visitProc_Funcs(Proc_Funcs ast, Object o);
   
   // Array Aggregates
   public abstract Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o);

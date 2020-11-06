@@ -54,6 +54,7 @@ import Triangle.AbstractSyntaxTrees.ProcActualParameter;
 import Triangle.AbstractSyntaxTrees.ProcDeclaration;
 import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
 import Triangle.AbstractSyntaxTrees.ProcProc_Func;
+import Triangle.AbstractSyntaxTrees.Proc_Funcs;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
@@ -400,6 +401,15 @@ public class TableVisitor implements Visitor {
             
       return(null);
   }
+  
+  // Proc-Funcs por Adrian Diaz
+  public Object visitProc_Funcs(Proc_Funcs ast, Object o) {
+      ast.PF1.visit(this,null);
+      ast.PF2.visit(this,null);
+      
+      return(null);
+  }
+  
   // </editor-fold>
   
   // <editor-fold defaultstate="collapsed" desc=" Aggregates ">

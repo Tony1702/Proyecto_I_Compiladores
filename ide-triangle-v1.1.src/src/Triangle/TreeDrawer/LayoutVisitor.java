@@ -61,6 +61,7 @@ import Triangle.AbstractSyntaxTrees.ProcActualParameter;
 import Triangle.AbstractSyntaxTrees.ProcDeclaration;
 import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
 import Triangle.AbstractSyntaxTrees.ProcProc_Func;
+import Triangle.AbstractSyntaxTrees.Proc_Funcs;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
@@ -246,6 +247,12 @@ public class LayoutVisitor implements Visitor {
     return layoutQuaternary("FunProc_Func.", ast.I, ast.FPS, ast.T, ast.E);
  }
 
+ //Proc_Funcs por Adrián
+ @Override
+ public Object visitProc_Funcs(Proc_Funcs ast, Object o) {
+     return layoutBinary("Proc_Func.", ast.PF1,ast.PF2);
+ }
+ 
   // Array Aggregates
   public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object obj) {
     return layoutBinary("Mult.ArrayAgg.", ast.E, ast.AA);

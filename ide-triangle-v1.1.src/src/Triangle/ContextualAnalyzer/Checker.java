@@ -64,6 +64,7 @@ import Triangle.AbstractSyntaxTrees.ProcActualParameter;
 import Triangle.AbstractSyntaxTrees.ProcDeclaration;
 import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
 import Triangle.AbstractSyntaxTrees.ProcProc_Func;
+import Triangle.AbstractSyntaxTrees.Proc_Funcs;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
@@ -368,7 +369,14 @@ public final class Checker implements Visitor {
     return null;
   }
 
-  // Proc_Func
+  // Proc_Func por Adrian Diaz
+  public Object visitProc_Funcs(Proc_Funcs ast, Object o) {
+    idTable.openScope();
+    ast.PF1.visit(this, null);
+    ast.PF2.visit(this, null);
+    idTable.closeScope();
+    return null; 
+  }
   
   public Object visitProcProc_Func(ProcProc_Func ast, Object o) {
       idTable.enter (ast.I.spelling, ast); // permits recursion
