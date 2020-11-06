@@ -803,10 +803,20 @@ public class Parser {
     case Token.RECURSIVE:
         {
           acceptIt();
-          declarationAST = parseProc_Funcs();
+          Declaration d1AST = parseProcFunction();
+          accept(Token.PIPE);
+          Declaration d2AST = parseProcFunction();
+          if(currentToken.kind == Token.END){
+              acceptIt();
+              finish(declarationPos);
+              declarationAST = new RecursiveDeclaration(d1AST, d2AST, declarationPos);
+          }
+          else{
+          Declaration d3AST = parseRestOfProcFuncs();
           accept(Token.END);
           finish(declarationPos);
-          
+          declarationAST = new RecursiveDeclaration(d1AST, new RecursiveDeclaration(d2AST, d3AST, declarationPos), declarationPos);
+          }
         }
         break;
     
@@ -876,7 +886,7 @@ Declaration parseProcFunction() throws SyntaxError {
       break;
 
     default:
-      syntacticError("\"%\" cannot start a ProcFunc",
+      syntacticError("\"%\" cannot start a Proc / Func",
         currentToken.spelling);
       break;
     }
@@ -884,31 +894,30 @@ Declaration parseProcFunction() throws SyntaxError {
   }  
 
 //Proc_Funcs parser por Adrian Diaz
-Declaration parseProc_Funcs() throws SyntaxError {
+Declaration parseRestOfProcFuncs() throws SyntaxError {
     
     Declaration proc_FuncsAST = null; // in case there's a syntactic error
     
     SourcePosition proc_FuncsPos = new SourcePosition();
     start (proc_FuncsPos);
-     
-    do
-    {
-      proc_FuncsAST = parseProcFunction();
-      if (currentToken.kind == Token.PIPE){
-         acceptIt();
-        Declaration d2AST = parseProcFunction();
-        finish(proc_FuncsPos);
-        Declaration RecAST = new RecursiveDeclaration(proc_FuncsAST, d2AST,
-        proc_FuncsPos);
-        
-        return RecAST;   
-      }
-
-    }
-    while (currentToken.kind == Token.PIPE);
     
+        if (currentToken.kind == Token.PIPE){
+            acceptIt();
+            Declaration d1AST = parseProcFunction();
+            if(currentToken.kind == Token.PIPE){
+                Declaration d2AST = parseRestOfProcFuncs();
+                finish(proc_FuncsPos);
+                proc_FuncsAST = new RecursiveDeclaration(d1AST, d2AST, previousTokenPosition);
+            }
+            else if(currentToken.kind == Token.END){
+                proc_FuncsAST = d1AST;
+            }
+            else{
+                syntacticError("\"%\" cannot start a Proc / Func", currentToken.spelling);
+            }
+        }
+   
     return proc_FuncsAST;
-    
 }
 //ProcFunctions parseProcFunctions() throws SyntaxError {
 //    ProcFunctions procFunctionsAST = null; // in case there's a syntactic error

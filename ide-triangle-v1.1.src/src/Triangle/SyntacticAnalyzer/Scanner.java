@@ -193,6 +193,11 @@ public final class Scanner {
                 takeIt();
                 addHtmlIdentifier(true);
                 return Token.IS;
+                
+            case '|':
+                takeIt();
+                addHtmlIdentifier(true);
+                return Token.PIPE;
 
             case '(':
                 takeIt();
@@ -285,7 +290,6 @@ public final class Scanner {
         }
     }
 
-    //agrega texto con formato para las literales
     private void addHtmlLiteral() {
         htmlContent += "<p style=\"color:Blue;\">" + htmlSpaces + currentSpelling.toString() + "</p>";
         htmlSpaces = "";
@@ -295,7 +299,6 @@ public final class Scanner {
     private void addToHtmlComment(String newChar) {
         htmlComment += newChar;
     }
-    //agrega texto con formato para las comentarios
 
     private void addHtmlComment() {
         htmlContent += "<p style=\"color:ForestGreen; padding-left:1em;\">" + htmlSpaces + htmlComment + "</p>";
