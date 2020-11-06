@@ -307,14 +307,12 @@ public final class Scanner {
         counter++;
     }
 
-    //agrega los espacios que se van acumulando cuando se lee
     private void addHtmlSpace() {
         htmlContent += "<p color ='#00b300'>" + htmlSpaces + currentSpelling.toString() + "</p>";
         htmlSpaces = "";
         counter++;
     }
 
-    //agrega el salto de linea al html
     private void addHtmlJumpLine() {
         htmlContent += "<br/>";
         htmlSpaces = "";
