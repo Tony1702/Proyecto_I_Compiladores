@@ -25,7 +25,7 @@ public final class Scanner {
     private String htmlContent;
     private String htmlComment;
     private String htmlSpaces;
-    private int counter;
+
 
     private boolean isLetter(char c) {
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
@@ -51,7 +51,6 @@ public final class Scanner {
         htmlContent = "";
         htmlComment = "";
         htmlSpaces = "";
-        counter = 0;
     }
 
     public void enableDebugging() {
@@ -274,8 +273,7 @@ public final class Scanner {
     private void addHtmlReservedWord(){
         
         htmlContent += "<p style=\"padding-left:1em; \n padding-right:1em\"><b>" + htmlSpaces + currentSpelling.toString() + "</p></b>";
-        htmlSpaces = "";
-        counter++;   
+        htmlSpaces = "";  
         
     }
 
@@ -286,14 +284,12 @@ public final class Scanner {
         } else {
             htmlContent += "<p>" + htmlSpaces + currentSpelling.toString() + "</p>";
             htmlSpaces = "";
-            counter++; 
         }
     }
 
     private void addHtmlLiteral() {
         htmlContent += "<p style=\"color:Blue;\">" + htmlSpaces + currentSpelling.toString() + "</p>";
         htmlSpaces = "";
-        counter++;
     }
 
     private void addToHtmlComment(String newChar) {
@@ -304,19 +300,16 @@ public final class Scanner {
         htmlContent += "<p style=\"color:ForestGreen; padding-left:1em;\">" + htmlSpaces + htmlComment + "</p>";
         htmlComment = "";
         htmlSpaces = "";
-        counter++;
     }
 
     private void addHtmlSpace() {
         htmlContent += "<p color ='#00b300'>" + htmlSpaces + currentSpelling.toString() + "</p>";
         htmlSpaces = "";
-        counter++;
     }
 
     private void addHtmlJumpLine() {
         htmlContent += "<br/>";
         htmlSpaces = "";
-        counter++;
     }
 
     private void addHtmlTab() {
