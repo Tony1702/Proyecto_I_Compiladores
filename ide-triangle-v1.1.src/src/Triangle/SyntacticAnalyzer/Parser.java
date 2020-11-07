@@ -683,17 +683,16 @@ public class Parser {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+  //modificaciones por Anthony
   Declaration parseDeclaration() throws SyntaxError {
     Declaration declarationAST = null; // in case there's a syntactic error
 
     SourcePosition declarationPos = new SourcePosition();
     
     start(declarationPos);
-    //declarationAST = parseSingleDeclaration();
     declarationAST = parseCompoundDeclaration();
     while (currentToken.kind == Token.SEMICOLON) {
       acceptIt();
-      //Declaration dAST = parseSingleDeclaration();
       Declaration d2AST = parseCompoundDeclaration();
       finish(declarationPos);
       declarationAST = new SequentialDeclaration(declarationAST, d2AST,
@@ -701,7 +700,8 @@ public class Parser {
     }
     return declarationAST;
   }
-
+  
+//modificaciones por Anthony, Adrian y Fabian
   Declaration parseSingleDeclaration() throws SyntaxError {
     Declaration declarationAST = null; // in case there's a syntactic error
 
@@ -793,13 +793,15 @@ public class Parser {
     return declarationAST;
   }
 
+  //Metodo modificado por Fabian, Anthony y Adrian
   Declaration parseCompoundDeclaration() throws SyntaxError {
     Declaration declarationAST = null; // in case there's a syntactic error
 
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
     switch (currentToken.kind) {
-          
+    
+    //nuevo case Recursive
     case Token.RECURSIVE:
         {
           acceptIt();
@@ -845,6 +847,7 @@ public class Parser {
 //
 ///////////////////////////////////////////////////////////////////////////////  
 
+//Metodo por Anthony, Adrian y Fabian
 Declaration parseProcFunction() throws SyntaxError {
     Declaration procFunctionAST = null; // in case there's a syntactic error
     
@@ -893,7 +896,7 @@ Declaration parseProcFunction() throws SyntaxError {
     return procFunctionAST;
   }  
 
-//Proc_Funcs parser por Adrian Diaz
+//Metodo por Fabian
 Declaration parseRestOfProcFuncs() throws SyntaxError {
     
     Declaration proc_FuncsAST = null; // in case there's a syntactic error

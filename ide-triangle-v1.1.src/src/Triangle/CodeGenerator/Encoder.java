@@ -393,7 +393,7 @@ public final class Encoder implements Visitor {
           Frame frame2 = new Frame(frame.level + 1, Machine.linkDataSize);
           ast.PF2.visit(this, frame2);
       }   
-      emit(Machine.RETURNop, 0, 0, argsSize); //argsSize is correct?
+      emit(Machine.RETURNop, 0, 0, argsSize);
       patch(jumpAddr, nextInstrAddr);
       return new Integer(0);
   }
@@ -1115,8 +1115,14 @@ public final class Encoder implements Visitor {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object visitRecursiveDeclaration(RecursiveDeclaration aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    //metodo por Adrian Diaz
+    public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
+        Frame frame = (Frame) o;
+        int extraSize1, extraSize2;
+
+        extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
+        Frame frame1 = new Frame (frame, extraSize1);
+        extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
+        return new Integer(extraSize1 + extraSize2);
     }
 }
