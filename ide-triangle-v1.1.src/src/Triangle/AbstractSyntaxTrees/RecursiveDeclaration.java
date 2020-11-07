@@ -9,7 +9,7 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 /**
  *
- * @author Adrian
+ * @author Adrian Diaz
  */
 public class RecursiveDeclaration extends Declaration {
 

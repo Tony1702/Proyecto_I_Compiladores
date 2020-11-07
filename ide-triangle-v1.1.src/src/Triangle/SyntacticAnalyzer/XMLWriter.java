@@ -87,7 +87,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Fabian
+ * @author Fabian Barahona
  */
 public class XMLWriter implements Visitor{
     private FileWriter fileWriter;

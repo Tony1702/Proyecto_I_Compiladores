@@ -234,12 +234,13 @@ public class LayoutVisitor implements Visitor {
     return layoutBinary("VarDecl.", ast.I, ast.T);
   }
     
-    public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o) {
-        return layoutBinary("VarExpDecl.", aThis.I, aThis.E);
-    }
+  public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o) {
+    return layoutBinary("VarExpDecl.", aThis.I, aThis.E);
+  }
     
-     public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object obj) { 
-       return layoutBinary("Rec.Decl.", ast.D1, ast.D2);
+  //nuevo metodo visit
+  public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object obj) { 
+    return layoutBinary("Rec.Decl.", ast.D1, ast.D2);
   }
            
   // Proc_Func
@@ -253,7 +254,7 @@ public class LayoutVisitor implements Visitor {
     return layoutQuaternary("FunProc_Func.", ast.I, ast.FPS, ast.T, ast.E);
  }
 
- //Proc_Funcs por Adrián
+ //Proc_Funcs por Adrian
  @Override
  public Object visitProc_Funcs(Proc_Funcs ast, Object o) {
      return layoutBinary("Proc_Func.", ast.PF1,ast.PF2);

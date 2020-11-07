@@ -32,6 +32,7 @@ public class IdEntry {
     this.previous = previous;
   }
   
+  //Metodo por Anthony para la regla Proc_Func
   IdEntry (String id, Proc_Func attr2, int level, IdEntry previous) {
     this.id = id;
     this.attr2 = attr2;

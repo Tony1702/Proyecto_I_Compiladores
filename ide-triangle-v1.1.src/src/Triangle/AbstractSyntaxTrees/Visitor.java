@@ -27,10 +27,10 @@ public interface Visitor {
   public abstract Object visitWhileCommand(WhileCommand ast, Object o);
   public abstract Object visitLoopCommand(LoopCommand ast, Object o); //nuevo command
   public abstract Object visitLoopWhileCommand(LoopWhileCommand ast, Object o);//nuevo command
-  public abstract Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o);
-  public abstract Object visitLoopUntilCommand(LoopUntilCommand ast, Object o);
-  public abstract Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o);
-  public abstract Object visitLoopForCommand(LoopForCommand aThis, Object o);
+  public abstract Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o); //nuevo command
+  public abstract Object visitLoopUntilCommand(LoopUntilCommand ast, Object o); //nuevo command
+  public abstract Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o); //nuevo command
+  public abstract Object visitLoopForCommand(LoopForCommand aThis, Object o); //nuevo command
   // Expressions
   public abstract Object visitArrayExpression(ArrayExpression ast, Object o);
   public abstract Object visitBinaryExpression(BinaryExpression ast, Object o);
@@ -54,13 +54,13 @@ public interface Visitor {
   public abstract Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o);
   public abstract Object visitVarDeclaration(VarDeclaration ast, Object o);
   public abstract Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o);
+  //Recursive Declaration por Adrian
   public abstract Object visitRecursiveDeclaration(RecursiveDeclaration aThis, Object o);
-  // ProcFunction
+  
+// ProcFunction
+  public abstract Object visitProc_Funcs(Proc_Funcs ast, Object o);
   public abstract Object visitProcProc_Func(ProcProc_Func ast, Object o);
   public abstract Object visitFuncProc_Func(FuncProc_Func ast, Object o);
-  
-  // ProcFunctions
-  public abstract Object visitProc_Funcs(Proc_Funcs ast, Object o);
   
   // Array Aggregates
   public abstract Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o);

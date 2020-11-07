@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Fabian
+ * @author Fabian Barahona
  */
 public class HtmlWriter {
     private String fileName;

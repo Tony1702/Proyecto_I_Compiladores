@@ -1115,6 +1115,7 @@ public final class Encoder implements Visitor {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    //visitRecursiveDeclaration
     //metodo por Adrian Diaz
     public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
         Frame frame = (Frame) o;

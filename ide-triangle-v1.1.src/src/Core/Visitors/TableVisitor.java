@@ -378,7 +378,7 @@ public class TableVisitor implements Visitor {
   // </editor-fold>
   
   // <editor-fold defaultstate="collapsed" desc=" Proc-Func ">
-  // Proc-Func
+  // Proc-Func por Anthony Ulloa
   public Object visitProcProc_Func(ProcProc_Func ast, Object o) {
             try {
       addIdentifier(ast.I.spelling, "KnownRoutine", 

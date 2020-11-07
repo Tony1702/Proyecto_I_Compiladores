@@ -922,18 +922,7 @@ Declaration parseRestOfProcFuncs() throws SyntaxError {
    
     return proc_FuncsAST;
 }
-//ProcFunctions parseProcFunctions() throws SyntaxError {
-//    ProcFunctions procFunctionsAST = null; // in case there's a syntactic error
-//    
-//    SourcePosition procFunctionsPos = new SourcePosition();
-//    
-//    start (procFunctionsPos);
-//    
-//    procFunctionsAST = ProcFunction
-//    commandAST = parseSingleCommand();        
-//    
-//    return procFunctionsAST;
-//}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //

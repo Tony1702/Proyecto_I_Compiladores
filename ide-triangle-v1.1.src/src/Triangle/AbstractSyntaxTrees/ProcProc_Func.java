@@ -9,7 +9,7 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 /**
  *
- * @author Tony1
+ * @author Anthony Ulloa
  */
 public class ProcProc_Func extends Proc_Func {
 

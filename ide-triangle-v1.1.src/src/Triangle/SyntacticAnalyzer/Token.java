@@ -171,6 +171,7 @@ final class Token extends Object {
     "<error>"
   };
 
+  //Metodos por Fabian para el generador de HTML y de XML
   private final static int	firstReservedWord = Token.ARRAY,
   				lastReservedWord  = Token.WHILE;
     public static boolean isReservedWord(String token){

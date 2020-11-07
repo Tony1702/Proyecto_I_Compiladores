@@ -241,7 +241,7 @@ public class TreeVisitor implements Visitor {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Proc_Func ">
-    // Proc_Func
+    // Proc_Func por Anthony Ulloa
     public Object visitProcProc_Func(ProcProc_Func ast, Object o) {
         return(createTernary("Procedure Declaration", ast.I, ast.FPS, ast.C));
     }
@@ -250,7 +250,7 @@ public class TreeVisitor implements Visitor {
         return(createQuaternary("Function Declaration", ast.I, ast.FPS, ast.T, ast.E));
     }
     
-    //por Adrian Diaz
+    // Proc_Funcs por Adrian Diaz
     public Object visitProc_Funcs(Proc_Funcs ast, Object o)  {
         return(createBinary("Proc Func",ast.PF1 ,ast.PF2));
     }

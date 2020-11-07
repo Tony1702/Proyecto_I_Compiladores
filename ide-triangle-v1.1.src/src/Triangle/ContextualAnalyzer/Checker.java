@@ -379,6 +379,7 @@ public final class Checker implements Visitor {
     return null; 
   }
   
+  // ProcProc_Func y FuncProc_Func por Anthony Ulloa
   public Object visitProcProc_Func(ProcProc_Func ast, Object o) {
       idTable.enter (ast.I.spelling, ast); // permits recursion
     if (ast.duplicated)
@@ -992,7 +993,7 @@ public final class Checker implements Visitor {
     StdEnvironment.unequalDecl = declareStdBinaryOp("\\=", StdEnvironment.anyType, StdEnvironment.anyType, StdEnvironment.booleanType);
 
   }
-
+    //Nuevos visitors creados con el autogenerador
     @Override
     public Object visitElseCommand(ElseCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
