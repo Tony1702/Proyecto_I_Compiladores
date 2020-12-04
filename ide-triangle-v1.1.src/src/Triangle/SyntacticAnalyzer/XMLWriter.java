@@ -77,6 +77,8 @@ import Triangle.AbstractSyntaxTrees.VarActualParameter;
 import Triangle.AbstractSyntaxTrees.VarDeclaration;
 import Triangle.AbstractSyntaxTrees.VarFormalParameter;
 import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
+import Triangle.AbstractSyntaxTrees.VariableExpression;
+import Triangle.AbstractSyntaxTrees.VariableLiteral;
 import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
@@ -110,6 +112,8 @@ public class XMLWriter implements Visitor{
             Logger.getLogger(XMLWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    //Command
     public Object visitAssignCommand(AssignCommand ast, Object o) {
         writeLine("<AssignCommand>");
         ast.V.visit(this, null);
@@ -212,7 +216,8 @@ public class XMLWriter implements Visitor{
         writeLine("</LoopForCommand>");
         return null;
     }
-
+    
+    //Expression
     public Object visitArrayExpression(ArrayExpression ast, Object o) {
         writeLine("<ArrayExpression>");
         ast.AA.visit(this, null);
@@ -265,7 +270,6 @@ public class XMLWriter implements Visitor{
         return null;
     }
 
-
     public Object visitLetExpression(LetExpression ast, Object o) {
         writeLine("<LetExpression>");
         ast.D.visit(this, null);
@@ -293,6 +297,14 @@ public class XMLWriter implements Visitor{
         writeLine("<VnameExpression>");
         ast.V.visit(this, null);
         writeLine("</VnameExpression>");
+        return null;
+    }
+    
+    //Nuevo Metodo Proyecto II
+    public Object visitVariableExpression(VariableExpression ast, Object o) {
+        writeLine("<VariableExpression>");
+        ast.VL.visit(this, null);
+        writeLine("</VariableExpression>");
         return null;
     }
 
@@ -388,7 +400,7 @@ public class XMLWriter implements Visitor{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-        @Override
+    @Override
     public Object visitProc_Funcs(Proc_Funcs ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -597,7 +609,7 @@ public class XMLWriter implements Visitor{
         return null;
     }
 
-       public Object visitCharacterLiteral(CharacterLiteral ast, Object obj) {
+    public Object visitCharacterLiteral(CharacterLiteral ast, Object obj) {
         writeLine("<CharacterLiteral value=\"" + ast.spelling + "\"/>");
         return null;
     }
@@ -642,6 +654,12 @@ public class XMLWriter implements Visitor{
         writeLine("</SubscriptVname>");
         return null;
     }
+    
+    //Nuevo Metodo Proyecto II
+    public Object visitVariableLiteral(VariableLiteral ast, Object o) {
+        writeLine("<VariableLiteral value=\"" + ast.spelling + "\"/>");
+        return null;
+    }
 
     // Programs
     public Object visitProgram(Program ast, Object obj) {
@@ -658,8 +676,5 @@ public class XMLWriter implements Visitor{
             Logger.getLogger(XMLWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-    }
-
-
-    
+    }    
 }

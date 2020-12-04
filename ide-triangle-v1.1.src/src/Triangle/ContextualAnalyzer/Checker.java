@@ -98,6 +98,8 @@ import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
+import Triangle.AbstractSyntaxTrees.VariableExpression;
+import Triangle.AbstractSyntaxTrees.VariableLiteral;
 
 public final class Checker implements Visitor {
 
@@ -114,7 +116,6 @@ public final class Checker implements Visitor {
       reporter.reportError ("assignment incompatibilty", "", ast.position);
     return null;
   }
-
 
   public Object visitCallCommand(CallCommand ast, Object o) {
 
@@ -171,6 +172,7 @@ public final class Checker implements Visitor {
       
       return null;
   }
+  
   // Expressions
 
   // Returns the TypeDenoter denoting the type of the expression. Does
@@ -255,6 +257,12 @@ public final class Checker implements Visitor {
 
   public Object visitIntegerExpression(IntegerExpression ast, Object o) {
     ast.type = StdEnvironment.integerType;
+    return ast.type;
+  }
+  
+  //Nuevo Metodo
+  public Object visitVariableExpression(VariableExpression ast, Object o) {
+    ast.type = StdEnvironment.anyType;
     return ast.type;
   }
 
@@ -706,6 +714,11 @@ public final class Checker implements Visitor {
   public Object visitIntegerLiteral(IntegerLiteral IL, Object o) {
     return StdEnvironment.integerType;
   }
+  
+  //Nuevo Metodo
+  public Object visitVariableLiteral(VariableLiteral ast, Object o) {
+    return StdEnvironment.anyType;
+  }
 
   public Object visitOperator(Operator O, Object o) {
     Declaration binding = idTable.retrieve(O.spelling);
@@ -876,6 +889,19 @@ public final class Checker implements Visitor {
     constExpr = new IntegerExpression(null, dummyPos);
     constExpr.type = constType;
     binding = new ConstDeclaration(new Identifier(id, dummyPos), constExpr, dummyPos);
+    idTable.enter(id, binding);
+    return binding;
+  }
+  
+  // Nueva Metodo Proyecto II
+  private VarDeclaration declareStdVar (String id, TypeDenoter anyType) {
+
+    VariableExpression varExpr;
+    VarDeclaration binding;
+
+    varExpr = new VariableExpression(null, dummyPos);
+    varExpr.type = anyType;
+    binding = new VarDeclaration(new Identifier(id, dummyPos), varExpr, dummyPos);
     idTable.enter(id, binding);
     return binding;
   }

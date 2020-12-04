@@ -92,6 +92,8 @@ import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopForCommand;
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
+import Triangle.AbstractSyntaxTrees.VariableExpression;
+import Triangle.AbstractSyntaxTrees.VariableLiteral;
 public class LayoutVisitor implements Visitor {
 
   private final int BORDER = 5;
@@ -132,20 +134,20 @@ public class LayoutVisitor implements Visitor {
     return layoutBinary("WhileCom.", ast.E, ast.C);
   }
  
-    public Object visitLoopWhileCommand(LoopWhileCommand ast, Object o) {
+  public Object visitLoopWhileCommand(LoopWhileCommand ast, Object o) {
         return layoutBinary("LoopWhileCom", ast.E, ast.C);
     }
-   public Object visitLoopUntilCommand(LoopUntilCommand ast, Object o){
+  public Object visitLoopUntilCommand(LoopUntilCommand ast, Object o){
        return layoutBinary("LoopUntilCom", ast.E, ast.C);
    }
-   public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object obj) {
+  public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object obj) {
        return layoutBinary("LoopDoUntilCom.", ast.C, ast.E);
     }
-   public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object obj) {
+  public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object obj) {
        return layoutBinary("LoopDoWhileCom.", ast.C, ast.E);
     }
    
-   public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
+  public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
         return layoutQuaternary("LoopForCom.", aThis.I, aThis.E1, aThis.E2, aThis.C);  
     }
 
@@ -172,7 +174,7 @@ public class LayoutVisitor implements Visitor {
   public Object visitCharacterExpression(CharacterExpression ast, Object obj) {
     return layoutUnary("Char.Expr.", ast.CL);
   }
-
+  
   public Object visitEmptyExpression(EmptyExpression ast, Object obj) {
     return layoutNullary("EmptyExpr.");
   }
@@ -199,6 +201,11 @@ public class LayoutVisitor implements Visitor {
 
   public Object visitVnameExpression(VnameExpression ast, Object obj) {
     return layoutUnary("VnameExpr.", ast.V);
+  }
+  
+  //Nuevo Metodo Proyecto II
+  public Object visitVariableExpression(VariableExpression ast, Object o) {
+    return layoutUnary("Any.Expr.", ast.VL);
   }
 
   // Declarations
@@ -397,11 +404,15 @@ public class LayoutVisitor implements Visitor {
   public Object visitIntegerLiteral(IntegerLiteral ast, Object obj) {
     return layoutNullary(ast.spelling);
   }
-
+  
   public Object visitOperator(Operator ast, Object obj) {
     return layoutNullary(ast.spelling);
   }
-
+  
+  //Nuevo Metodo Proyecto II
+  public Object visitVariableLiteral(VariableLiteral ast, Object o) {
+    return layoutNullary(ast.spelling);
+  }
 
   // Value-or-variable names
   public Object visitDotVname(DotVname ast, Object obj) {
@@ -610,6 +621,4 @@ public class LayoutVisitor implements Visitor {
     public Object visitLoopCommand(LoopCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-
 }

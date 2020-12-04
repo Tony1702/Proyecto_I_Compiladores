@@ -87,6 +87,8 @@ import Triangle.CodeGenerator.UnknownValue;
 import Triangle.AbstractSyntaxTrees.LoopCommand; //nuevo
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
+import Triangle.AbstractSyntaxTrees.VariableExpression;
+import Triangle.AbstractSyntaxTrees.VariableLiteral;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -257,6 +259,11 @@ public class TableVisitor implements Visitor {
       ast.V.visit(this, null);
       
       return(null);
+  }
+  
+  //Nuevo Metodo Proyecto II
+  public Object visitVariableExpression(VariableExpression ast, Object o) {
+    return(null);
   }
   // </editor-fold>
   
@@ -660,6 +667,11 @@ public class TableVisitor implements Visitor {
   public Object visitOperator(Operator ast, Object o) { 
       ast.decl.visit(this, null);
   
+      return(null);
+  }
+  
+  //Nuevo Metodo Proyecto II
+  public Object visitVariableLiteral(VariableLiteral ast, Object o) {
       return(null);
   }
   // </editor-fold>

@@ -43,6 +43,8 @@ public interface Visitor {
   public abstract Object visitRecordExpression(RecordExpression ast, Object o);
   public abstract Object visitUnaryExpression(UnaryExpression ast, Object o);
   public abstract Object visitVnameExpression(VnameExpression ast, Object o);
+  //Nuevo Metodo Proyecto II
+  public abstract Object visitVariableExpression(VariableExpression aThis, Object o);
 
   // Declarations
   public abstract Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object o);
@@ -108,6 +110,8 @@ public interface Visitor {
   public abstract Object visitIdentifier(Identifier ast, Object o);
   public abstract Object visitIntegerLiteral(IntegerLiteral ast, Object o);
   public abstract Object visitOperator(Operator ast, Object o);
+  //Nuevo Metodo Proyecto II
+  public abstract Object visitVariableLiteral(VariableLiteral ast, Object o);
 
   // Value-or-variable names
   public abstract Object visitDotVname(DotVname ast, Object o);
@@ -116,9 +120,4 @@ public interface Visitor {
 
   // Programs
   public abstract Object visitProgram(Program ast, Object o);
-
-
-
-    
-
 }
