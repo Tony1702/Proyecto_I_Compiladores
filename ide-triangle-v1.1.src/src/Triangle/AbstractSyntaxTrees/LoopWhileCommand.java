@@ -16,10 +16,11 @@ public class LoopWhileCommand extends Command{
         E = eAST;
         C = cAST;
     }
-    @Override
+    
     public Object visit(Visitor v, Object o) {
         return v.visitLoopWhileCommand(this, o); //To change body of generated methods, choose Tools | Templates.
     }
+
     public Expression E;
     public Command C;
 }

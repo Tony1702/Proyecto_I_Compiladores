@@ -1,0 +1,16 @@
+<?xml version="1.0" standalone="yes"?>
+
+<Program>
+<LoopWhileCommand>
+<BinaryExpression>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+<Operator value="="/>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+</BinaryExpression>
+<EmptyCommand/>
+</LoopWhileCommand>
+</Program>

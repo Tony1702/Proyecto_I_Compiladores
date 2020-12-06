@@ -349,6 +349,7 @@ public class Parser {
                 accept(Token.END);
                 finish(commandPos);
                 commandAST = new LoopWhileCommand(eAst, cAST, commandPos);
+                System.out.println("Aqui 1");
                 break;
             }
             case Token.DO:{

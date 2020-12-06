@@ -1,0 +1,19 @@
+<?xml version="1.0" standalone="yes"?>
+
+<Program>
+<LoopWhileCommand>
+<IntegerExpression>
+<IntegerLiteral value="0"/>
+</IntegerExpression>
+<CallCommand>
+<Identifier value="putint"/>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
+</LoopWhileCommand>
+</Program>

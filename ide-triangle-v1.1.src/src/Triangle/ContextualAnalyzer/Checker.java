@@ -260,12 +260,6 @@ public final class Checker implements Visitor {
     return ast.type;
   }
   
-  //Nuevo Metodo
-  public Object visitVariableExpression(VariableExpression ast, Object o) {
-    ast.type = StdEnvironment.anyType;
-    return ast.type;
-  }
-
   public Object visitLetExpression(LetExpression ast, Object o) {
     idTable.openScope();
     ast.D.visit(this, null);
@@ -304,7 +298,7 @@ public final class Checker implements Visitor {
     ast.type = (TypeDenoter) ast.V.visit(this, null);
     return ast.type;
   }
-
+  
   // Declarations
 
   // Always returns null. Does not use the given object.
@@ -350,8 +344,10 @@ public final class Checker implements Visitor {
   }
 
   public Object visitSequentialDeclaration(SequentialDeclaration ast, Object o) {
+    idTable.openScope();
     ast.D1.visit(this, null);
     ast.D2.visit(this, null);
+    idTable.closeScope();
     return null;
   }
 
@@ -715,18 +711,18 @@ public final class Checker implements Visitor {
     return StdEnvironment.integerType;
   }
   
-  //Nuevo Metodo
-  public Object visitVariableLiteral(VariableLiteral ast, Object o) {
-    return StdEnvironment.anyType;
-  }
-
   public Object visitOperator(Operator O, Object o) {
     Declaration binding = idTable.retrieve(O.spelling);
     if (binding != null)
       O.decl = binding;
     return binding;
   }
-
+  
+  //Nuevo Metodo Proyecto II
+  public Object visitVariableLiteral(VariableLiteral ast, Object o) {
+    return StdEnvironment.anyType;
+  }
+  
   // Value-or-variable names
 
   // Determines the address of a named object (constant or variable).
@@ -892,19 +888,6 @@ public final class Checker implements Visitor {
     idTable.enter(id, binding);
     return binding;
   }
-  
-  // Nueva Metodo Proyecto II
-  private VarDeclaration declareStdVar (String id, TypeDenoter anyType) {
-
-    VariableExpression varExpr;
-    VarDeclaration binding;
-
-    varExpr = new VariableExpression(null, dummyPos);
-    varExpr.type = anyType;
-    binding = new VarDeclaration(new Identifier(id, dummyPos), varExpr, dummyPos);
-    idTable.enter(id, binding);
-    return binding;
-  }
 
   // Creates a small AST to represent the "declaration" of a standard
   // type, and enters it in the identification table.
@@ -1019,44 +1002,104 @@ public final class Checker implements Visitor {
     StdEnvironment.unequalDecl = declareStdBinaryOp("\\=", StdEnvironment.anyType, StdEnvironment.anyType, StdEnvironment.booleanType);
 
   }
-    //Nuevos visitors creados con el autogenerador
-    @Override
-    public Object visitElseCommand(ElseCommand ast, Object o) {
+  
+  // <editor-fold defaultstate="collapsed" desc=" Nuevos Metodos Proyecto II ">
+  // Expression
+  public Object visitVariableExpression(VariableExpression ast, Object o) {
+    ast.type = StdEnvironment.anyType;
+    return ast.type;
+  }
+  
+  //Declaraciones
+  public Object visitVarInitDeclaration(VarDeclaration ast, Object o) {
+    ast.T = (TypeDenoter) ast.E.visit(this, null);
+    idTable.enter (ast.I.spelling, ast);
+    if (ast.duplicated)
+      reporter.reportError ("identifier \"%\" already declared",
+                            ast.I.spelling, ast.position);
+
+    return null;
+  }
+  
+  public Object visitFuncDeclarationRec(FuncDeclaration ast, Object o) {
+    ast.T = (TypeDenoter) ast.T.visit(this, null);
+    idTable.openScope();
+    ast.FPS.visit(this, null);
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    idTable.closeScope();
+    if (! ast.T.equals(eType))
+      reporter.reportError ("body of function \"%\" has wrong type",
+                            ast.I.spelling, ast.E.position);
+    return null;
+  }
+
+  public Object visitProcDeclarationRec(ProcDeclaration ast, Object o) {
+    idTable.openScope();
+    ast.FPS.visit(this, null);
+    ast.C.visit(this, null);
+    idTable.closeScope();
+    return null;
+  }
+  
+  // VarDeclaration Std
+  private VarDeclaration declareStdVar (String id, TypeDenoter anyType) {
+
+    VariableExpression varExpr;
+    VarDeclaration binding;
+
+    varExpr = new VariableExpression(null, dummyPos);
+    varExpr.type = anyType;
+    binding = new VarDeclaration(new Identifier(id, dummyPos), varExpr, dummyPos);
+    idTable.enter(id, binding);
+    return binding;
+  }
+  // </editor-fold>
+  
+  // <editor-fold defaultstate="collapsed" desc=" Nuevos Metodos Proyecto I ">
+  //Nuevos visitors creados con el autogenerador
+  @Override
+  public Object visitElseCommand(ElseCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object visitLoopWhileCommand(LoopWhileCommand aThis, Object o) {
+  public Object visitLoopWhileCommand(LoopWhileCommand ast, Object o) {
+    System.out.println("Aqui 2");
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    if (! eType.equals(StdEnvironment.booleanType))
+      reporter.reportError("Boolean expression expected here", "", ast.E.position);
+    ast.C.visit(this, null);
+    return null;
+  }
+
+  @Override
+  public Object visitLoopUntilCommand(LoopUntilCommand aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object visitLoopUntilCommand(LoopUntilCommand aThis, Object o) {
+  @Override
+  public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o) {
+  @Override
+  public Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o) {
+  @Override
+  public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
+  @Override
+  public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o) {
+  @Override
+  public Object visitRecursiveDeclaration(RecursiveDeclaration aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public Object visitRecursiveDeclaration(RecursiveDeclaration aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
+  // </editor-fold>
 }

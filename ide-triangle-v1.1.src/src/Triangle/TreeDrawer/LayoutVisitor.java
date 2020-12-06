@@ -137,12 +137,15 @@ public class LayoutVisitor implements Visitor {
   public Object visitLoopWhileCommand(LoopWhileCommand ast, Object o) {
         return layoutBinary("LoopWhileCom", ast.E, ast.C);
     }
+  
   public Object visitLoopUntilCommand(LoopUntilCommand ast, Object o){
        return layoutBinary("LoopUntilCom", ast.E, ast.C);
    }
+  
   public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object obj) {
        return layoutBinary("LoopDoUntilCom.", ast.C, ast.E);
     }
+  
   public Object visitLoopDoWhileCommand(LoopDoWhileCommand ast, Object obj) {
        return layoutBinary("LoopDoWhileCom.", ast.C, ast.E);
     }
@@ -201,11 +204,6 @@ public class LayoutVisitor implements Visitor {
 
   public Object visitVnameExpression(VnameExpression ast, Object obj) {
     return layoutUnary("VnameExpr.", ast.V);
-  }
-  
-  //Nuevo Metodo Proyecto II
-  public Object visitVariableExpression(VariableExpression ast, Object o) {
-    return layoutUnary("Any.Expr.", ast.VL);
   }
 
   // Declarations
@@ -408,11 +406,6 @@ public class LayoutVisitor implements Visitor {
   public Object visitOperator(Operator ast, Object obj) {
     return layoutNullary(ast.spelling);
   }
-  
-  //Nuevo Metodo Proyecto II
-  public Object visitVariableLiteral(VariableLiteral ast, Object o) {
-    return layoutNullary(ast.spelling);
-  }
 
   // Value-or-variable names
   public Object visitDotVname(DotVname ast, Object obj) {
@@ -611,6 +604,17 @@ public class LayoutVisitor implements Visitor {
 
     return r;
   }
+  
+  // <editor-fold defaultstate="collapsed" desc=" Nuevos Metodos Proyecto II ">
+  //Expression
+  public Object visitVariableExpression(VariableExpression ast, Object o) {
+    return layoutUnary("Any.Expr.", ast.VL);
+  }
+  //Literal
+  public Object visitVariableLiteral(VariableLiteral ast, Object o) {
+    return layoutNullary(ast.spelling);
+  }
+  // </editor-fold>
 
     @Override
     public Object visitElseCommand(ElseCommand ast, Object o) {

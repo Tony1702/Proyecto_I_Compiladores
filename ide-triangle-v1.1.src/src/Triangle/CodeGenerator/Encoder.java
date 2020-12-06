@@ -269,15 +269,6 @@ public final class Encoder implements Visitor {
     encodeFetch(ast.V, frame, valSize.intValue());
     return valSize;
   }
-  
-  //Nuevo Metodo Proyecto II - Cambiar tipo
-  public Object visitVariableExpression(VariableExpression ast, Object o) { 
-    Frame frame = (Frame) o;
-    Integer valSize = (Integer) ast.type.visit(this, null);
-    emit(Machine.LOADLop, 0, 0, ast.VL.spelling.charAt(1));
-    return valSize;
-  }
-
 
   // Declarations
   public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast,
@@ -758,11 +749,6 @@ public final class Encoder implements Visitor {
     return null;
   }
 
-  //Nuevo Metodo Proyecto II
-  public Object visitVariableLiteral(VariableLiteral ast, Object o) {
-    return null;
-  }
-
   // Value-or-variable names
   public Object visitDotVname(DotVname ast, Object o) {
     Frame frame = (Frame) o;
@@ -1092,15 +1078,39 @@ public final class Encoder implements Visitor {
       }
     }
   }
-
+  
+  // <editor-fold defaultstate="collapsed" desc=" Nuevos Metodos Proyecto II ">
+  //Expression -- Cambiar tipo
+  public Object visitVariableExpression(VariableExpression ast, Object o) { 
+    Frame frame = (Frame) o;
+    Integer valSize = (Integer) ast.type.visit(this, null);
+    emit(Machine.LOADLop, 0, 0, ast.VL.spelling.charAt(1));
+    return valSize;
+  }
+  
+  //Literal
+  public Object visitVariableLiteral(VariableLiteral ast, Object o) {
+    return null;
+  }
+  // </editor-fold>
+  
     @Override
     public Object visitElseCommand(ElseCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object visitLoopWhileCommand(LoopWhileCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public Object visitLoopWhileCommand(LoopWhileCommand ast, Object o) {
+        Frame frame = (Frame) o;
+        int jumpAddr, loopAddr;
+
+        jumpAddr = nextInstrAddr;
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        loopAddr = nextInstrAddr;
+        ast.E.visit(this, frame);
+        patch(jumpAddr, nextInstrAddr);
+        ast.C.visit(this, frame);
+        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+        return null;
     }
 
     @Override
