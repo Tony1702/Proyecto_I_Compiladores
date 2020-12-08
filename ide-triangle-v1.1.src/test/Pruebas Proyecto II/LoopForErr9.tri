@@ -1,0 +1,6 @@
+loop for i := 1 to 10 do 
+
+  put (i) ! debe dar error, i es Integer, no Char, put requiere argumento Char
+
+end
+

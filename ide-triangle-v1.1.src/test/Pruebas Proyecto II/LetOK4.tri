@@ -1,0 +1,18 @@
+!  lets anidados
+let
+
+  var a := 0
+
+in
+
+  let
+    const b ~ a ;
+    var   a := b + 1 ! es permitido redefinir a a
+  in
+    putint (a) ! debe imprimir 1
+  end
+
+end
+ 
+
+
