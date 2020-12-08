@@ -101,6 +101,8 @@ import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
+import Triangle.AbstractSyntaxTrees.VariableExpression;
+import Triangle.AbstractSyntaxTrees.VariableLiteral;
 
 public final class Encoder implements Visitor {
 
@@ -201,14 +203,13 @@ public final class Encoder implements Visitor {
     return valSize;
   }
 
-  public Object visitCharacterExpression(CharacterExpression ast,
-						Object o) {
+  public Object visitCharacterExpression(CharacterExpression ast, Object o) {
     Frame frame = (Frame) o;
     Integer valSize = (Integer) ast.type.visit(this, null);
     emit(Machine.LOADLop, 0, 0, ast.CL.spelling.charAt(1));
     return valSize;
   }
-
+  
   public Object visitEmptyExpression(EmptyExpression ast, Object o) {
     return new Integer(0);
   }
@@ -266,6 +267,14 @@ public final class Encoder implements Visitor {
     Frame frame = (Frame) o;
     Integer valSize = (Integer) ast.type.visit(this, null);
     encodeFetch(ast.V, frame, valSize.intValue());
+    return valSize;
+  }
+  
+  //Nuevo Metodo Proyecto II - Cambiar tipo
+  public Object visitVariableExpression(VariableExpression ast, Object o) { 
+    Frame frame = (Frame) o;
+    Integer valSize = (Integer) ast.type.visit(this, null);
+    emit(Machine.LOADLop, 0, 0, ast.VL.spelling.charAt(1));
     return valSize;
   }
 
@@ -698,7 +707,7 @@ public final class Encoder implements Visitor {
   public Object visitCharacterLiteral(CharacterLiteral ast, Object o) {
     return null;
   }
-
+  
   public Object visitIdentifier(Identifier ast, Object o) {
     Frame frame = (Frame) o;
     if (ast.decl.entity instanceof KnownRoutine) {
@@ -749,6 +758,10 @@ public final class Encoder implements Visitor {
     return null;
   }
 
+  //Nuevo Metodo Proyecto II
+  public Object visitVariableLiteral(VariableLiteral ast, Object o) {
+    return null;
+  }
 
   // Value-or-variable names
   public Object visitDotVname(DotVname ast, Object o) {
