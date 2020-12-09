@@ -14,6 +14,7 @@
 
 package Triangle.ContextualAnalyzer;
 
+import Triangle.AbstractSyntaxTrees.ActualParameterSequence;
 import Triangle.ErrorReporter;
 import Triangle.StdEnvironment;
 import Triangle.AbstractSyntaxTrees.AnyTypeDenoter;
@@ -28,6 +29,7 @@ import Triangle.AbstractSyntaxTrees.CallExpression;
 import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
+import Triangle.AbstractSyntaxTrees.Command;
 import Triangle.AbstractSyntaxTrees.ConstActualParameter;
 import Triangle.AbstractSyntaxTrees.ConstDeclaration;
 import Triangle.AbstractSyntaxTrees.ConstFormalParameter;
@@ -1033,7 +1035,6 @@ public final class Checker implements Visitor {
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
                             ast.I.spelling, ast.position);
-
     return null;
   }
   
@@ -1108,34 +1109,83 @@ public final class Checker implements Visitor {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-  public Object visitLoopWhileCommand(LoopWhileCommand ast, Object o) {
-    System.out.println("Aqui 2");
-    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
-    if (! eType.equals(StdEnvironment.booleanType))
-      reporter.reportError("Boolean expression expected here", "", ast.E.position);
-    ast.C.visit(this, null);
-    return null;
-  }
 
-  @Override
-  public Object visitLoopUntilCommand(LoopUntilCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitLoopWhileCommand(LoopWhileCommand aThis, Object o) {
+        TypeDenoter eType = (TypeDenoter) aThis.E.visit(this, null);
+        if (!eType.equals(StdEnvironment.booleanType))
+            reporter.reportError("Boolean expression expected here", "", aThis.E.position);
+        aThis.C.visit(this, null);
+        return null;
     }
 
-  @Override
-  public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitLoopUntilCommand(LoopUntilCommand aThis, Object o) {
+        TypeDenoter eType = (TypeDenoter) aThis.E.visit(this, null);
+        if (!eType.equals(StdEnvironment.booleanType))
+            reporter.reportError("Boolean expression expected here", "", aThis.E.position);
+        aThis.C.visit(this, null);
+        return null;
     }
 
-  @Override
-  public Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o) {
+        TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+        if (!eType.equals(StdEnvironment.booleanType))
+            reporter.reportError("Boolean expression expected here", "", ast.E.position);
+        ast.C.visit(this, null);
+        return null;
     }
 
-  @Override
-  public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o) {
+        TypeDenoter eType = (TypeDenoter) aThis.E.visit(this, null);
+        if (!eType.equals(StdEnvironment.booleanType))
+            reporter.reportError("Boolean expression expected here", "", aThis.E.position);
+        aThis.C.visit(this, null);
+        return null;
     }
+
+
+    public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
+        TypeDenoter eType= (TypeDenoter) aThis.E1.visit(this, null);
+        TypeDenoter e1Type = (TypeDenoter) aThis.E2.visit(this, null);
+        if(!eType.equals(StdEnvironment.integerType))
+            reporter.reportError("Boolean expression expected here", "", aThis.E1.position);
+        if(!e1Type.equals(StdEnvironment.integerType))
+            reporter.reportError("Boolean expression expected here", "", aThis.E2.position);
+        VarInitializationDeclaration dec = new VarInitializationDeclaration(aThis.I, aThis.E1, aThis.position);
+        idTable.openScope();
+        idTable.enter(dec.toString(), dec);
+        Command command = aThis.C;
+        //No puede estar a la izquierda de una asignacion
+        if(command instanceof LetCommand){
+            Command let = ((LetCommand) command).C;
+            if (let instanceof AssignCommand){
+                SimpleVname simpleVname= (SimpleVname)((AssignCommand) let).V;
+                if (dec.I.spelling.equals(simpleVname.I.spelling))
+                    reporter.reportError("Variable can't be assigned here", "", aThis.C.position);
+
+            }
+        }
+        //No puede ser pasado como parametros
+        else if (command instanceof CallCommand){
+            ActualParameterSequence aps = ((CallCommand) command).APS;
+            if(aps instanceof SingleActualParameterSequence){
+                VarActualParameter varActualParameter = (VarActualParameter)((SingleActualParameterSequence) aps).AP;
+                SimpleVname simpleVname = (SimpleVname) varActualParameter.V;
+                if(dec.I.spelling.equals(simpleVname.I.spelling))
+                    reporter.reportError("Control variable can't be passed as reference parameter", "", aThis.C.position);
+            }
+            else if(aps instanceof MultipleActualParameterSequence){
+                VarActualParameter varActualParameter = (VarActualParameter)((MultipleActualParameterSequence) aps).AP;
+                SimpleVname simpleVname = (SimpleVname) varActualParameter.V;
+                if(dec.I.spelling.equals(simpleVname.I.spelling))
+                    reporter.reportError("Control variable can't be passed as reference parameter", "", aThis.C.position);
+            }
+        }
+        idTable.closeScope();
+        return null;
+
+    }
+
 
   public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
     System.out.println("Aqui 2");
