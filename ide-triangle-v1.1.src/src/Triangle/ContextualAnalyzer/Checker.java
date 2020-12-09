@@ -260,12 +260,6 @@ public final class Checker implements Visitor {
     ast.type = StdEnvironment.integerType;
     return ast.type;
   }
-  
-  //Nuevo Metodo
-  public Object visitVariableExpression(VariableExpression ast, Object o) {
-    ast.type = StdEnvironment.anyType;
-    return ast.type;
-  }
 
   public Object visitLetExpression(LetExpression ast, Object o) {
     idTable.openScope();
@@ -313,6 +307,16 @@ public final class Checker implements Visitor {
     return null;
   }
 
+  public Object visitVarDeclaration(VarDeclaration ast, Object o) {
+    ast.T = (TypeDenoter) ast.T.visit(this, null);
+    idTable.enter (ast.I.spelling, ast);
+    if (ast.duplicated)
+      reporter.reportError ("identifier \"%\" already declared",
+                            ast.I.spelling, ast.position);
+
+    return null;
+  }
+  
   public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
     idTable.enter(ast.I.spelling, ast);
@@ -323,6 +327,7 @@ public final class Checker implements Visitor {
   }
 
   public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
+    System.out.println("Aqui 1");
     ast.T = (TypeDenoter) ast.T.visit(this, null);
     idTable.enter (ast.I.spelling, ast); // permits recursion
     if (ast.duplicated)
@@ -366,16 +371,6 @@ public final class Checker implements Visitor {
   }
 
   public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o) {
-    return null;
-  }
-
-  public Object visitVarDeclaration(VarDeclaration ast, Object o) {
-    ast.T = (TypeDenoter) ast.T.visit(this, null);
-    idTable.enter (ast.I.spelling, ast);
-    if (ast.duplicated)
-      reporter.reportError ("identifier \"%\" already declared",
-                            ast.I.spelling, ast.position);
-
     return null;
   }
 
@@ -533,6 +528,8 @@ public final class Checker implements Visitor {
     else if (! eType.equals(((ConstFormalParameter) fp).T))
       reporter.reportError ("wrong type for const actual parameter", "",
                             ast.E.position);
+    
+      System.out.println("Aqui" + fp.toString());
     return null;
   }
 
@@ -715,11 +712,6 @@ public final class Checker implements Visitor {
   public Object visitIntegerLiteral(IntegerLiteral IL, Object o) {
     return StdEnvironment.integerType;
   }
-  
-  //Nuevo Metodo
-  public Object visitVariableLiteral(VariableLiteral ast, Object o) {
-    return StdEnvironment.anyType;
-  }
 
   public Object visitOperator(Operator O, Object o) {
     Declaration binding = idTable.retrieve(O.spelling);
@@ -776,6 +768,9 @@ public final class Checker implements Visitor {
         ast.variable = false;
       } else if (binding instanceof VarDeclaration) {
         ast.type = ((VarDeclaration) binding).T;
+        ast.variable = true;
+      } else if (binding instanceof VarInitializationDeclaration) {
+        ast.type = ((VarInitializationDeclaration) binding).T;
         ast.variable = true;
       } else if (binding instanceof ConstFormalParameter) {
         ast.type = ((ConstFormalParameter) binding).T;
@@ -893,19 +888,6 @@ public final class Checker implements Visitor {
     idTable.enter(id, binding);
     return binding;
   }
-  
-  // Nueva Metodo Proyecto II
-  private VarDeclaration declareStdVar (String id, TypeDenoter anyType) {
-
-    VariableExpression varExpr;
-    VarDeclaration binding;
-
-    varExpr = new VariableExpression(null, dummyPos);
-    varExpr.type = anyType;
-    binding = new VarDeclaration(new Identifier(id, dummyPos), varExpr, dummyPos);
-    idTable.enter(id, binding);
-    return binding;
-  }
 
   // Creates a small AST to represent the "declaration" of a standard
   // type, and enters it in the identification table.
@@ -986,9 +968,16 @@ public final class Checker implements Visitor {
     StdEnvironment.notDecl = declareStdUnaryOp("\\", StdEnvironment.booleanType, StdEnvironment.booleanType);
     StdEnvironment.andDecl = declareStdBinaryOp("/\\", StdEnvironment.booleanType, StdEnvironment.booleanType, StdEnvironment.booleanType);
     StdEnvironment.orDecl = declareStdBinaryOp("\\/", StdEnvironment.booleanType, StdEnvironment.booleanType, StdEnvironment.booleanType);
-
+    //Nuevas Inicializaciones Proyecto II
+    StdEnvironment.falseDec2 = declareStdVar("false", StdEnvironment.booleanType);
+    StdEnvironment.trueDec2 = declareStdVar("true", StdEnvironment.booleanType);
+    
     StdEnvironment.integerDecl = declareStdType("Integer", StdEnvironment.integerType);
     StdEnvironment.maxintDecl = declareStdConst("maxint", StdEnvironment.integerType);
+    //
+    StdEnvironment.maxint2 = declareStdVar("maxint", StdEnvironment.integerType);
+    StdEnvironment.maxchar2 = declareStdVar("Char", StdEnvironment.charType);
+    //
     StdEnvironment.addDecl = declareStdBinaryOp("+", StdEnvironment.integerType, StdEnvironment.integerType, StdEnvironment.integerType);
     StdEnvironment.subtractDecl = declareStdBinaryOp("-", StdEnvironment.integerType, StdEnvironment.integerType, StdEnvironment.integerType);
     StdEnvironment.multiplyDecl = declareStdBinaryOp("*", StdEnvironment.integerType, StdEnvironment.integerType, StdEnvironment.integerType);
@@ -1014,6 +1003,9 @@ public final class Checker implements Visitor {
                                             new VarFormalParameter(dummyI, StdEnvironment.integerType, dummyPos), dummyPos));
     StdEnvironment.putintDecl = declareStdProc("putint", new SingleFormalParameterSequence(
                                             new ConstFormalParameter(dummyI, StdEnvironment.integerType, dummyPos), dummyPos));
+    //
+    
+    //
     StdEnvironment.geteolDecl = declareStdProc("geteol", new EmptyFormalParameterSequence(dummyPos));
     StdEnvironment.puteolDecl = declareStdProc("puteol", new EmptyFormalParameterSequence(dummyPos));
     StdEnvironment.equalDecl = declareStdBinaryOp("=", StdEnvironment.anyType, StdEnvironment.anyType, StdEnvironment.booleanType);
@@ -1023,14 +1015,20 @@ public final class Checker implements Visitor {
   
   // <editor-fold defaultstate="collapsed" desc=" Nuevos Metodos Proyecto II ">
   // Expression
-//  public Object visitVariableExpression(VariableExpression ast, Object o) {
-//    ast.type = StdEnvironment.anyType;
-//    return ast.type;
-//  }
+  public Object visitVariableExpression(VariableExpression ast, Object o) {
+    ast.type = StdEnvironment.anyType;
+    return ast.type;
+  }
+  
+  //Literals
+  public Object visitVariableLiteral(VariableLiteral ast, Object o) {
+    return StdEnvironment.anyType;
+  }
   
   //Declaraciones
-  public Object visitVarInitDeclaration(VarInitializationDeclaration ast, Object o) {
-    ast.E = (Expression) ast.E.visit(this, null);
+  public Object visitVarInitDeclaration(VarDeclaration ast, Object o) { //VarInitializationDeclaration
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    ast.T = eType;
     idTable.enter (ast.I.spelling, ast);
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
@@ -1039,8 +1037,38 @@ public final class Checker implements Visitor {
     return null;
   }
   
-  public Object visitFuncDeclarationRec(FuncDeclaration ast, Object o) {
-    ast.T = (TypeDenoter) ast.T.visit(this, null);
+  public Object visitVarInitializationDeclaration(VarInitializationDeclaration ast, Object o) {
+    ast.T = (TypeDenoter) ast.E.visit(this, null);
+    idTable.enter (ast.I.spelling, ast);
+    if (ast.duplicated)
+      reporter.reportError ("identifier \"%\" already declared",
+                            ast.I.spelling, ast.position);
+    return null;
+  }
+  
+  public Object visitFuncDeclarationRec1(FuncDeclaration ast, Object o) {
+    idTable.enter (ast.I.spelling, ast); // permits recursion
+    if (ast.duplicated)
+      reporter.reportError ("identifier \"%\" already declared",
+                            ast.I.spelling, ast.position);
+    idTable.openScope();
+    ast.FPS.visit(this, null);
+    idTable.closeScope();
+    return null;
+  }
+
+  public Object visitProcDeclarationRec1(ProcDeclaration ast, Object o) {
+    idTable.enter (ast.I.spelling, ast); // permits recursion
+    if (ast.duplicated)
+      reporter.reportError ("identifier \"%\" already declared",
+                            ast.I.spelling, ast.position);
+    idTable.openScope();
+    ast.FPS.visit(this, null);
+    idTable.closeScope();
+    return null;
+  }
+  
+  public Object visitFuncDeclarationRec2(FuncDeclaration ast, Object o) {
     idTable.openScope();
     ast.FPS.visit(this, null);
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
@@ -1051,7 +1079,7 @@ public final class Checker implements Visitor {
     return null;
   }
 
-  public Object visitProcDeclarationRec(ProcDeclaration ast, Object o) {
+  public Object visitProcDeclarationRec2(ProcDeclaration ast, Object o) {
     idTable.openScope();
     ast.FPS.visit(this, null);
     ast.C.visit(this, null);
@@ -1059,18 +1087,18 @@ public final class Checker implements Visitor {
     return null;
   }
   
-  // VarDeclaration Std
-//  private VarDeclaration declareStdVar (String id, TypeDenoter anyType) {
-//
-//    VariableExpression varExpr;
-//    VarDeclaration binding;
-//
-//    varExpr = new VariableExpression(null, dummyPos);
-//    varExpr.type = anyType;
-//    binding = new VarDeclaration(new Identifier(id, dummyPos), varExpr, dummyPos);
-//    idTable.enter(id, binding);
-//    return binding;
-//  }
+  // STD
+  private VarDeclaration declareStdVar (String id, TypeDenoter anyType) {
+
+    VariableExpression varExpr;
+    VarDeclaration binding;
+
+    varExpr = new VariableExpression(null, dummyPos);
+    varExpr.type = anyType;
+    binding = new VarDeclaration(new Identifier(id, dummyPos), varExpr, dummyPos);
+    idTable.enter(id, binding);
+    return binding;
+  }
   // </editor-fold>
   
   // <editor-fold defaultstate="collapsed" desc=" Nuevos Metodos Proyecto I ">
@@ -1109,15 +1137,10 @@ public final class Checker implements Visitor {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-  @Override
-  public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-  @Override
-  public Object visitRecursiveDeclaration(RecursiveDeclaration aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
+    System.out.println("Aqui 2");
+    return null;  
+  }
     
   // </editor-fold>
 }
