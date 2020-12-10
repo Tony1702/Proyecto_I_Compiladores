@@ -41,7 +41,6 @@ import Triangle.AbstractSyntaxTrees.EmptyCommand;
 import Triangle.AbstractSyntaxTrees.EmptyExpression;
 import Triangle.AbstractSyntaxTrees.EmptyFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.ErrorTypeDenoter;
-import Triangle.AbstractSyntaxTrees.Expression;
 import Triangle.AbstractSyntaxTrees.FieldTypeDenoter;
 import Triangle.AbstractSyntaxTrees.FormalParameter;
 import Triangle.AbstractSyntaxTrees.FormalParameterSequence;
@@ -771,7 +770,7 @@ public final class Checker implements Visitor {
       } else if (binding instanceof VarDeclaration) {
         ast.type = ((VarDeclaration) binding).T;
         ast.variable = true;
-      } else if (binding instanceof VarInitializationDeclaration) {
+      } else if (binding instanceof VarInitializationDeclaration) { //Se agrego este else if para el visitVarInitializationDeclaration
         ast.type = ((VarInitializationDeclaration) binding).T;
         ast.variable = true;
       } else if (binding instanceof ConstFormalParameter) {
@@ -1027,10 +1026,9 @@ public final class Checker implements Visitor {
     return StdEnvironment.anyType;
   }
   
-  //Declaraciones
-  public Object visitVarInitDeclaration(VarDeclaration ast, Object o) { //VarInitializationDeclaration
-    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
-    ast.T = eType;
+  //Declaraciones  
+  public Object visitVarInitializationDeclaration(VarDeclaration ast, Object o) {
+    ast.T = (TypeDenoter) ast.E.visit(this, null);
     idTable.enter (ast.I.spelling, ast);
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
@@ -1143,7 +1141,7 @@ public final class Checker implements Visitor {
         return null;
     }
 
-
+    
     public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
         TypeDenoter eType= (TypeDenoter) aThis.E1.visit(this, null);
         TypeDenoter e1Type = (TypeDenoter) aThis.E2.visit(this, null);
@@ -1193,4 +1191,6 @@ public final class Checker implements Visitor {
   }
     
   // </editor-fold>
+
+    
 }
