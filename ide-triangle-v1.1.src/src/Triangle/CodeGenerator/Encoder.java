@@ -101,8 +101,6 @@ import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
-import Triangle.AbstractSyntaxTrees.VariableExpression;
-import Triangle.AbstractSyntaxTrees.VariableLiteral;
 
 public final class Encoder implements Visitor {
 
@@ -269,15 +267,6 @@ public final class Encoder implements Visitor {
     encodeFetch(ast.V, frame, valSize.intValue());
     return valSize;
   }
-  
-  //Nuevo Metodo Proyecto II - Cambiar tipo
-  public Object visitVariableExpression(VariableExpression ast, Object o) { 
-    Frame frame = (Frame) o;
-    Integer valSize = (Integer) ast.type.visit(this, null);
-    emit(Machine.LOADLop, 0, 0, ast.VL.spelling.charAt(1));
-    return valSize;
-  }
-
 
   // Declarations
   public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast,
@@ -755,11 +744,6 @@ public final class Encoder implements Visitor {
       emit(Machine.LOADLop, 0, 0, frame.size / 2);
       emit(Machine.CALLop, Machine.SBr, Machine.PBr, displacement);
     }
-    return null;
-  }
-
-  //Nuevo Metodo Proyecto II
-  public Object visitVariableLiteral(VariableLiteral ast, Object o) {
     return null;
   }
 

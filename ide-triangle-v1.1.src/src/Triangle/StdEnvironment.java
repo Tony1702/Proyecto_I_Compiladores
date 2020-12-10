@@ -21,7 +21,6 @@ import Triangle.AbstractSyntaxTrees.ProcDeclaration;
 import Triangle.AbstractSyntaxTrees.TypeDeclaration;
 import Triangle.AbstractSyntaxTrees.TypeDenoter;
 import Triangle.AbstractSyntaxTrees.UnaryOperatorDeclaration;
-import Triangle.AbstractSyntaxTrees.VarDeclaration;
 
 public final class StdEnvironment {
 
@@ -37,9 +36,6 @@ public final class StdEnvironment {
 
   public static ConstDeclaration
     falseDecl, trueDecl, maxintDecl;
-  
-  public static VarDeclaration
-    falseDec2, trueDec2, maxint2, maxchar2;
 
   public static UnaryOperatorDeclaration
     notDecl;

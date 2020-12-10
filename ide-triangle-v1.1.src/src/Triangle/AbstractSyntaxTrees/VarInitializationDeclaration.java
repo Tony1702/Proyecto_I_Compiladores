@@ -18,12 +18,17 @@ public class VarInitializationDeclaration extends Declaration{
         I = iAST;
         E = eAST;
     }
+    
+    public VarInitializationDeclaration (Identifier iAST, TypeDenoter tAST, SourcePosition thePosition) {
+        super (thePosition);
+        I = iAST;
+        T = tAST;
+    }
 
     public Object visit(Visitor v, Object o) {
         return v.visitVarInitializationDeclaration(this, o);
     }
     public Identifier I;
     public Expression E;
-    public TypeDenoter T;
-    
+    public TypeDenoter T;    
 }

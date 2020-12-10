@@ -25,12 +25,12 @@ public class VarDeclaration extends Declaration {
     T = tAST;
   }
  
-  public VarDeclaration (Identifier iAST, Expression eAST,
-                    SourcePosition thePosition) {
-    super (thePosition);
-    I = iAST;
-    E = eAST;
-  }
+//  public VarDeclaration (Identifier iAST, Expression eAST,
+//                    SourcePosition thePosition) {
+//    super (thePosition);
+//    I = iAST;
+//    E = eAST;
+//  }
   
   public Object visit(Visitor v, Object o) {
     return v.visitVarDeclaration(this, o);
@@ -38,5 +38,5 @@ public class VarDeclaration extends Declaration {
 
   public Identifier I;
   public TypeDenoter T;
-  public Expression E;
+//  public Expression E;
 }

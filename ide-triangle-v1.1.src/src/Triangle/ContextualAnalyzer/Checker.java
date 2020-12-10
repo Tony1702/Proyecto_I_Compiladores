@@ -100,8 +100,6 @@ import Triangle.AbstractSyntaxTrees.LoopUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopWhileCommand;
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
-import Triangle.AbstractSyntaxTrees.VariableExpression;
-import Triangle.AbstractSyntaxTrees.VariableLiteral;
 
 public final class Checker implements Visitor {
 
@@ -530,7 +528,7 @@ public final class Checker implements Visitor {
       reporter.reportError ("wrong type for const actual parameter", "",
                             ast.E.position);
     
-      System.out.println("Aqui" + fp.toString());
+      //System.out.println("Aqui" + fp.toString());
     return null;
   }
 
@@ -770,7 +768,7 @@ public final class Checker implements Visitor {
       } else if (binding instanceof VarDeclaration) {
         ast.type = ((VarDeclaration) binding).T;
         ast.variable = true;
-      } else if (binding instanceof VarInitializationDeclaration) { //Se agrego este else if para el visitVarInitializationDeclaration
+      } else if (binding instanceof VarInitializationDeclaration) { //Modificacion Proyecto II
         ast.type = ((VarInitializationDeclaration) binding).T;
         ast.variable = true;
       } else if (binding instanceof ConstFormalParameter) {
@@ -969,16 +967,10 @@ public final class Checker implements Visitor {
     StdEnvironment.notDecl = declareStdUnaryOp("\\", StdEnvironment.booleanType, StdEnvironment.booleanType);
     StdEnvironment.andDecl = declareStdBinaryOp("/\\", StdEnvironment.booleanType, StdEnvironment.booleanType, StdEnvironment.booleanType);
     StdEnvironment.orDecl = declareStdBinaryOp("\\/", StdEnvironment.booleanType, StdEnvironment.booleanType, StdEnvironment.booleanType);
-    //Nuevas Inicializaciones Proyecto II
-    StdEnvironment.falseDec2 = declareStdVar("false", StdEnvironment.booleanType);
-    StdEnvironment.trueDec2 = declareStdVar("true", StdEnvironment.booleanType);
     
     StdEnvironment.integerDecl = declareStdType("Integer", StdEnvironment.integerType);
     StdEnvironment.maxintDecl = declareStdConst("maxint", StdEnvironment.integerType);
-    //
-    StdEnvironment.maxint2 = declareStdVar("maxint", StdEnvironment.integerType);
-    StdEnvironment.maxchar2 = declareStdVar("Char", StdEnvironment.charType);
-    //
+
     StdEnvironment.addDecl = declareStdBinaryOp("+", StdEnvironment.integerType, StdEnvironment.integerType, StdEnvironment.integerType);
     StdEnvironment.subtractDecl = declareStdBinaryOp("-", StdEnvironment.integerType, StdEnvironment.integerType, StdEnvironment.integerType);
     StdEnvironment.multiplyDecl = declareStdBinaryOp("*", StdEnvironment.integerType, StdEnvironment.integerType, StdEnvironment.integerType);
@@ -1015,27 +1007,8 @@ public final class Checker implements Visitor {
   }
   
   // <editor-fold defaultstate="collapsed" desc=" Nuevos Metodos Proyecto II ">
-  // Expression
-  public Object visitVariableExpression(VariableExpression ast, Object o) {
-    ast.type = StdEnvironment.anyType;
-    return ast.type;
-  }
-  
-  //Literals
-  public Object visitVariableLiteral(VariableLiteral ast, Object o) {
-    return StdEnvironment.anyType;
-  }
   
   //Declaraciones  
-  public Object visitVarInitializationDeclaration(VarDeclaration ast, Object o) {
-    ast.T = (TypeDenoter) ast.E.visit(this, null);
-    idTable.enter (ast.I.spelling, ast);
-    if (ast.duplicated)
-      reporter.reportError ("identifier \"%\" already declared",
-                            ast.I.spelling, ast.position);
-    return null;
-  }
-  
   public Object visitVarInitializationDeclaration(VarInitializationDeclaration ast, Object o) {
     ast.T = (TypeDenoter) ast.E.visit(this, null);
     idTable.enter (ast.I.spelling, ast);
@@ -1085,107 +1058,91 @@ public final class Checker implements Visitor {
     idTable.closeScope();
     return null;
   }
-  
-  // STD
-  private VarDeclaration declareStdVar (String id, TypeDenoter anyType) {
 
-    VariableExpression varExpr;
-    VarDeclaration binding;
-
-    varExpr = new VariableExpression(null, dummyPos);
-    varExpr.type = anyType;
-    binding = new VarDeclaration(new Identifier(id, dummyPos), varExpr, dummyPos);
-    idTable.enter(id, binding);
-    return binding;
-  }
   // </editor-fold>
   
   // <editor-fold defaultstate="collapsed" desc=" Nuevos Metodos Proyecto I ">
   //Nuevos visitors creados con el autogenerador
   @Override
   public Object visitElseCommand(ElseCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
 
+  public Object visitLoopWhileCommand(LoopWhileCommand aThis, Object o) {
+    TypeDenoter eType = (TypeDenoter) aThis.E.visit(this, null);
+    if (!eType.equals(StdEnvironment.booleanType))
+        reporter.reportError("Boolean expression expected here", "", aThis.E.position);
+    aThis.C.visit(this, null);
+    return null;
+  }
 
-    public Object visitLoopWhileCommand(LoopWhileCommand aThis, Object o) {
-        TypeDenoter eType = (TypeDenoter) aThis.E.visit(this, null);
-        if (!eType.equals(StdEnvironment.booleanType))
-            reporter.reportError("Boolean expression expected here", "", aThis.E.position);
-        aThis.C.visit(this, null);
-        return null;
-    }
+  public Object visitLoopUntilCommand(LoopUntilCommand aThis, Object o) {
+    TypeDenoter eType = (TypeDenoter) aThis.E.visit(this, null);
+    if (!eType.equals(StdEnvironment.booleanType))
+        reporter.reportError("Boolean expression expected here", "", aThis.E.position);
+    aThis.C.visit(this, null);
+    return null;
+  }
 
-    public Object visitLoopUntilCommand(LoopUntilCommand aThis, Object o) {
-        TypeDenoter eType = (TypeDenoter) aThis.E.visit(this, null);
-        if (!eType.equals(StdEnvironment.booleanType))
-            reporter.reportError("Boolean expression expected here", "", aThis.E.position);
-        aThis.C.visit(this, null);
-        return null;
-    }
+  public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o) {
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+    if (!eType.equals(StdEnvironment.booleanType))
+        reporter.reportError("Boolean expression expected here", "", ast.E.position);
+    ast.C.visit(this, null);
+    return null;
+  }
 
-    public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o) {
-        TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
-        if (!eType.equals(StdEnvironment.booleanType))
-            reporter.reportError("Boolean expression expected here", "", ast.E.position);
-        ast.C.visit(this, null);
-        return null;
-    }
+  public Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o) {
+    TypeDenoter eType = (TypeDenoter) aThis.E.visit(this, null);
+    if (!eType.equals(StdEnvironment.booleanType))
+        reporter.reportError("Boolean expression expected here", "", aThis.E.position);
+    aThis.C.visit(this, null);
+    return null;
+  }
 
+  public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
+    TypeDenoter eType= (TypeDenoter) aThis.E1.visit(this, null);
+    TypeDenoter e1Type = (TypeDenoter) aThis.E2.visit(this, null);
+    if(!eType.equals(StdEnvironment.integerType))
+        reporter.reportError("Boolean expression expected here", "", aThis.E1.position);
+    if(!e1Type.equals(StdEnvironment.integerType))
+        reporter.reportError("Boolean expression expected here", "", aThis.E2.position);
+    VarInitializationDeclaration dec = new VarInitializationDeclaration(aThis.I, aThis.E1, aThis.position);
+    idTable.openScope();
+    idTable.enter(dec.toString(), dec);
+    Command command = aThis.C;
+    //No puede estar a la izquierda de una asignacion
+    checkLoopForCommand(command, dec);
+    idTable.closeScope();
+    return null;
+  }
 
-    public Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o) {
-        TypeDenoter eType = (TypeDenoter) aThis.E.visit(this, null);
-        if (!eType.equals(StdEnvironment.booleanType))
-            reporter.reportError("Boolean expression expected here", "", aThis.E.position);
-        aThis.C.visit(this, null);
-        return null;
-    }
-
-    
-    public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
-        TypeDenoter eType= (TypeDenoter) aThis.E1.visit(this, null);
-        TypeDenoter e1Type = (TypeDenoter) aThis.E2.visit(this, null);
-        if(!eType.equals(StdEnvironment.integerType))
-            reporter.reportError("Boolean expression expected here", "", aThis.E1.position);
-        if(!e1Type.equals(StdEnvironment.integerType))
-            reporter.reportError("Boolean expression expected here", "", aThis.E2.position);
-        VarInitializationDeclaration dec = new VarInitializationDeclaration(aThis.I, aThis.E1, aThis.position);
-        idTable.openScope();
-        idTable.enter(dec.toString(), dec);
-        Command command = aThis.C;
-        //No puede estar a la izquierda de una asignacion
-        checkLoopForCommand(command, dec);
-        idTable.closeScope();
-        return null;
-
-    }
-    public void checkLoopForCommand(Command command, VarInitializationDeclaration dec){
-        //No puede estar a la izquierda de una asignacion
-        if(command instanceof LetCommand){
-            Command let = ((LetCommand) command).C;
-            if (let instanceof AssignCommand){
-                SimpleVname simpleVname= (SimpleVname)((AssignCommand) let).V;
-                if (dec.I.spelling.equals(simpleVname.I.spelling))
-                    reporter.reportError("Variable can't be assigned here", "", command.position);
-
-            }
-        }
-        else if(command instanceof AssignCommand){
-            SimpleVname simpleVname = (SimpleVname) ((AssignCommand) command).V;
+  public void checkLoopForCommand(Command command, VarInitializationDeclaration dec){
+    //No puede estar a la izquierda de una asignacion
+    if(command instanceof LetCommand){
+        Command let = ((LetCommand) command).C;
+        if (let instanceof AssignCommand){
+            SimpleVname simpleVname= (SimpleVname)((AssignCommand) let).V;
             if (dec.I.spelling.equals(simpleVname.I.spelling))
                 reporter.reportError("Variable can't be assigned here", "", command.position);
         }
-        //No puede ser pasado como parametros
-        else if (command instanceof CallCommand){
-            ActualParameterSequence aps = ((CallCommand) command).APS;
-            if(aps instanceof SingleActualParameterSequence){
-                if (((SingleActualParameterSequence) aps).AP instanceof VarActualParameter){
-                    VarActualParameter varActualParameter = (VarActualParameter) ((SingleActualParameterSequence) aps).AP;
-                    SimpleVname simpleVname = (SimpleVname) varActualParameter.V;
-                    if(dec.I.spelling.equals(simpleVname.I.spelling))
-                        reporter.reportError("Control variable can't be passed as reference parameter", "", command.position);
-                }
-                else if(((SingleActualParameterSequence) aps).AP instanceof ConstActualParameter){
+    }
+    else if(command instanceof AssignCommand){
+        SimpleVname simpleVname = (SimpleVname) ((AssignCommand) command).V;
+        if (dec.I.spelling.equals(simpleVname.I.spelling))
+            reporter.reportError("Variable can't be assigned here", "", command.position);
+    }
+    //No puede ser pasado como parametros
+    else if (command instanceof CallCommand){
+        ActualParameterSequence aps = ((CallCommand) command).APS;
+        if(aps instanceof SingleActualParameterSequence){
+            if (((SingleActualParameterSequence) aps).AP instanceof VarActualParameter){
+                VarActualParameter varActualParameter = (VarActualParameter) ((SingleActualParameterSequence) aps).AP;
+                SimpleVname simpleVname = (SimpleVname) varActualParameter.V;
+                if(dec.I.spelling.equals(simpleVname.I.spelling))
+                    reporter.reportError("Control variable can't be passed as reference parameter", "", command.position);
+            }
+            else if(((SingleActualParameterSequence) aps).AP instanceof ConstActualParameter){
 //                    TypeDenoter ftype = (TypeDenoter) ((CallCommand) command).I.visit(this, null);
 //                    ConstActualParameter constActualParameter = (ConstActualParameter) ((SingleActualParameterSequence) aps).AP;
 //                    VnameExpression exp = (VnameExpression) constActualParameter.E;
@@ -1198,8 +1155,8 @@ public final class Checker implements Visitor {
                 if(((MultipleActualParameterSequence) aps).AP instanceof VarActualParameter){
                 VarActualParameter varActualParameter = (VarActualParameter)((MultipleActualParameterSequence) aps).AP;
                 SimpleVname simpleVname = (SimpleVname) varActualParameter.V;
-                if(dec.I.spelling.equals(simpleVname.I.spelling))
-                    reporter.reportError("Control variable can't be passed as reference parameter", "", command.position);
+                    if(dec.I.spelling.equals(simpleVname.I.spelling))
+                        reporter.reportError("Control variable can't be passed as reference parameter", "", command.position);
                 }
             }
         }
@@ -1208,14 +1165,11 @@ public final class Checker implements Visitor {
             checkLoopForCommand(((SequentialCommand) command).C2, dec);
         }
     }
-
+  }  
 
   public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
-    System.out.println("Aqui 2");
     return null;  
   }
     
-  // </editor-fold>
-
-    
+  // </editor-fold>   
 }

@@ -80,8 +80,6 @@ import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopForCommand;
 import Triangle.AbstractSyntaxTrees.RecursiveDeclaration;
 import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
-import Triangle.AbstractSyntaxTrees.VariableExpression;
-import Triangle.AbstractSyntaxTrees.VariableLiteral;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -198,10 +196,6 @@ public class TreeVisitor implements Visitor {
         return(createUnary("Vname Expression", ast.V));
     }
     
-    //Nuevo Metodo Proyecto II
-    public Object visitVariableExpression(VariableExpression ast, Object o) {
-        return(createUnary("Variable Expression", ast.VL));
-    }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Declarations ">
@@ -403,11 +397,7 @@ public class TreeVisitor implements Visitor {
     public Object visitOperator(Operator ast, Object obj) {
         return(createNullary(ast.spelling));
     }
-    
-    //Nuevo Metodo Proyecto II
-    public Object visitVariableLiteral(VariableLiteral ast, Object o) {
-        return(createNullary(ast.spelling));
-    }
+
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Values or Variable Names ">

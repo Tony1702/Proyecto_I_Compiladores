@@ -77,8 +77,6 @@ import Triangle.AbstractSyntaxTrees.VarActualParameter;
 import Triangle.AbstractSyntaxTrees.VarDeclaration;
 import Triangle.AbstractSyntaxTrees.VarFormalParameter;
 import Triangle.AbstractSyntaxTrees.VarInitializationDeclaration;
-import Triangle.AbstractSyntaxTrees.VariableExpression;
-import Triangle.AbstractSyntaxTrees.VariableLiteral;
 import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
@@ -297,14 +295,6 @@ public class XMLWriter implements Visitor{
         writeLine("<VnameExpression>");
         ast.V.visit(this, null);
         writeLine("</VnameExpression>");
-        return null;
-    }
-    
-    //Nuevo Metodo Proyecto II
-    public Object visitVariableExpression(VariableExpression ast, Object o) {
-        writeLine("<VariableExpression>");
-        ast.VL.visit(this, null);
-        writeLine("</VariableExpression>");
         return null;
     }
 
@@ -652,12 +642,6 @@ public class XMLWriter implements Visitor{
         ast.V.visit(this, null);
         ast.E.visit(this, null);
         writeLine("</SubscriptVname>");
-        return null;
-    }
-    
-    //Nuevo Metodo Proyecto II
-    public Object visitVariableLiteral(VariableLiteral ast, Object o) {
-        writeLine("<VariableLiteral value=\"" + ast.spelling + "\"/>");
         return null;
     }
 
