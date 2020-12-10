@@ -1154,34 +1154,59 @@ public final class Checker implements Visitor {
         idTable.enter(dec.toString(), dec);
         Command command = aThis.C;
         //No puede estar a la izquierda de una asignacion
+        checkLoopForCommand(command, dec);
+        idTable.closeScope();
+        return null;
+
+    }
+    public void checkLoopForCommand(Command command, VarInitializationDeclaration dec){
+        //No puede estar a la izquierda de una asignacion
         if(command instanceof LetCommand){
             Command let = ((LetCommand) command).C;
             if (let instanceof AssignCommand){
                 SimpleVname simpleVname= (SimpleVname)((AssignCommand) let).V;
                 if (dec.I.spelling.equals(simpleVname.I.spelling))
-                    reporter.reportError("Variable can't be assigned here", "", aThis.C.position);
+                    reporter.reportError("Variable can't be assigned here", "", command.position);
 
             }
+        }
+        else if(command instanceof AssignCommand){
+            SimpleVname simpleVname = (SimpleVname) ((AssignCommand) command).V;
+            if (dec.I.spelling.equals(simpleVname.I.spelling))
+                reporter.reportError("Variable can't be assigned here", "", command.position);
         }
         //No puede ser pasado como parametros
         else if (command instanceof CallCommand){
             ActualParameterSequence aps = ((CallCommand) command).APS;
             if(aps instanceof SingleActualParameterSequence){
-                VarActualParameter varActualParameter = (VarActualParameter)((SingleActualParameterSequence) aps).AP;
-                SimpleVname simpleVname = (SimpleVname) varActualParameter.V;
-                if(dec.I.spelling.equals(simpleVname.I.spelling))
-                    reporter.reportError("Control variable can't be passed as reference parameter", "", aThis.C.position);
+                if (((SingleActualParameterSequence) aps).AP instanceof VarActualParameter){
+                    VarActualParameter varActualParameter = (VarActualParameter) ((SingleActualParameterSequence) aps).AP;
+                    SimpleVname simpleVname = (SimpleVname) varActualParameter.V;
+                    if(dec.I.spelling.equals(simpleVname.I.spelling))
+                        reporter.reportError("Control variable can't be passed as reference parameter", "", command.position);
+                }
+                else if(((SingleActualParameterSequence) aps).AP instanceof ConstActualParameter){
+//                    TypeDenoter ftype = (TypeDenoter) ((CallCommand) command).I.visit(this, null);
+//                    ConstActualParameter constActualParameter = (ConstActualParameter) ((SingleActualParameterSequence) aps).AP;
+//                    VnameExpression exp = (VnameExpression) constActualParameter.E;
+//                    TypeDenoter vtype = (TypeDenoter) exp.V.visit(this, null);
+//                    if (!ftype.equals(vtype))
+//                        reporter.reportError("Function/Proc expecting " + ftype.toString() + " ,recieved: " + vtype.toString(), "", command.position);
+//                }
             }
             else if(aps instanceof MultipleActualParameterSequence){
+                if(((MultipleActualParameterSequence) aps).AP instanceof VarActualParameter){
                 VarActualParameter varActualParameter = (VarActualParameter)((MultipleActualParameterSequence) aps).AP;
                 SimpleVname simpleVname = (SimpleVname) varActualParameter.V;
                 if(dec.I.spelling.equals(simpleVname.I.spelling))
-                    reporter.reportError("Control variable can't be passed as reference parameter", "", aThis.C.position);
+                    reporter.reportError("Control variable can't be passed as reference parameter", "", command.position);
+                }
             }
         }
-        idTable.closeScope();
-        return null;
-
+        else if(command instanceof SequentialCommand){
+            checkLoopForCommand(((SequentialCommand) command).C1, dec);
+            checkLoopForCommand(((SequentialCommand) command).C2, dec);
+        }
     }
 
 
