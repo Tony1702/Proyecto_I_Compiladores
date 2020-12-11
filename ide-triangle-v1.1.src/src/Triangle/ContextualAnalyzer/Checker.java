@@ -144,15 +144,31 @@ public final class Checker implements Visitor {
     ast.C2.visit(this, null);
     return null;
   }
-
+  
+  //Modificado por Adrian Diaz
   public Object visitLetCommand(LetCommand ast, Object o) {
+    System.out.println("LetCommand /n");
+    if(ast.D instanceof FuncDeclaration) {
+        System.out.println("Es Func " + ast.D.toString());
+    FuncDeclaration FuncBinding = (FuncDeclaration) ast.D.visit(this,null);
+    idTable.enter(FuncBinding.I.spelling, ast.D); // permits recursion
+        if (ast.D.duplicated)
+          reporter.reportError ("identifier \"%\" already declared",
+                             FuncBinding.I.spelling, ast.position); }  
+    else if(ast.D instanceof ProcDeclaration) {
+        System.out.println("Es Proc " + ast.D.toString());
+    ProcDeclaration ProcBinding = (ProcDeclaration) ast.D.visit(this,null);
+    idTable.enter(ProcBinding.I.spelling, ast.D); // permits recursion
+        if (ast.D.duplicated)
+          reporter.reportError ("identifier \"%\" already declared",
+                             ProcBinding.I.spelling, ast.position); }
     idTable.openScope();
     ast.D.visit(this, null);
     ast.C.visit(this, null);
     idTable.closeScope();
     return null;
   }
-
+  
   public Object visitSequentialCommand(SequentialCommand ast, Object o) {
     ast.C1.visit(this, null);
     ast.C2.visit(this, null);
@@ -375,6 +391,7 @@ public final class Checker implements Visitor {
 
   // Proc_Func por Adrian Diaz
   public Object visitProc_Funcs(Proc_Funcs ast, Object o) {
+      
     idTable.openScope();
     ast.PF1.visit(this, null);
     ast.PF2.visit(this, null);
