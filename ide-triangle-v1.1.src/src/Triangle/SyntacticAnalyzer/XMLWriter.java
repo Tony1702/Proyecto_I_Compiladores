@@ -39,6 +39,7 @@ import Triangle.AbstractSyntaxTrees.IntegerExpression;
 import Triangle.AbstractSyntaxTrees.IntegerLiteral;
 import Triangle.AbstractSyntaxTrees.LetCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
+import Triangle.AbstractSyntaxTrees.LocalDeclaration;
 import Triangle.AbstractSyntaxTrees.LoopCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
@@ -349,6 +350,13 @@ public class XMLWriter implements Visitor{
         ast.D1.visit(this, null);
         ast.D2.visit(this, null);
         writeLine("</RecursiveDeclaration>");
+        return null;
+    }
+    public Object visitLocalDeclaration(LocalDeclaration aThis, Object o) {
+        writeLine("<LocalDeclaration>");
+        aThis.D1.visit(this, null);
+        aThis.D2.visit(this, null);
+        writeLine("</LocalDeclaration>");
         return null;
     }
     

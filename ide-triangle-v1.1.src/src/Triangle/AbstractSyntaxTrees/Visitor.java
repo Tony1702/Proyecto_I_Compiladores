@@ -54,8 +54,10 @@ public interface Visitor {
   public abstract Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o);
   public abstract Object visitVarDeclaration(VarDeclaration ast, Object o);
   public abstract Object visitVarInitializationDeclaration(VarInitializationDeclaration ast, Object o);
+  public abstract Object visitLocalDeclaration(LocalDeclaration aThis, Object o);
   //Recursive Declaration por Adrian
   public abstract Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o);
+  
   
 // ProcFunction
   public abstract Object visitProc_Funcs(Proc_Funcs ast, Object o);
@@ -116,4 +118,6 @@ public interface Visitor {
 
   // Programs
   public abstract Object visitProgram(Program ast, Object o);
+
+    
 }

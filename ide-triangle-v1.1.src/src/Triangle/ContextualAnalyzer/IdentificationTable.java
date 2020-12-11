@@ -34,7 +34,26 @@ public final class IdentificationTable {
 
     level ++;
   }
-
+  
+  public void lowerScope(){
+    level--;
+  }
+  
+  public void closeLowerScopeLevel(){
+    IdEntry entry,local,local2;
+    local=null;
+    entry = this.latest;
+    while (entry.level == this.level) {
+      local = entry;
+      entry = local.previous;
+    }
+    //Se busca el primer elemento del nivel más profundo
+    while (entry.level == this.level + 1) {
+      local2 = entry;
+      entry = local2.previous;
+    }
+    local.previous = entry;
+  }
   // Closes the topmost level in the identification table, discarding
   // all entries belonging to that level.
 

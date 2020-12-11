@@ -59,6 +59,7 @@ import Triangle.AbstractSyntaxTrees.IntegerExpression;
 import Triangle.AbstractSyntaxTrees.IntegerLiteral;
 import Triangle.AbstractSyntaxTrees.LetCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
+import Triangle.AbstractSyntaxTrees.LocalDeclaration;
 import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
@@ -1122,5 +1123,10 @@ public final class Encoder implements Visitor {
         Frame frame1 = new Frame (frame, extraSize1);
         extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
         return new Integer(extraSize1 + extraSize2);
+    }
+
+    @Override
+    public Object visitLocalDeclaration(LocalDeclaration aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

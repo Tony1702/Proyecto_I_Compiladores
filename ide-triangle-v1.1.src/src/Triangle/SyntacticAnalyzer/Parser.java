@@ -49,6 +49,7 @@ import Triangle.AbstractSyntaxTrees.IntegerExpression;
 import Triangle.AbstractSyntaxTrees.IntegerLiteral;
 import Triangle.AbstractSyntaxTrees.LetCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
+import Triangle.AbstractSyntaxTrees.LocalDeclaration;
 import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopForCommand;
@@ -824,7 +825,7 @@ public class Parser {
           Declaration d3AST = parseDeclaration();
           accept(Token.END);
           finish(declarationPos);
-          declarationAST = new SequentialDeclaration(d2AST, d3AST, declarationPos);
+          declarationAST = new LocalDeclaration(d2AST, d3AST, declarationPos);
         }
         break;
         

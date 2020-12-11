@@ -44,6 +44,7 @@ import Triangle.AbstractSyntaxTrees.LoopDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.LoopDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.LoopForCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
+import Triangle.AbstractSyntaxTrees.LocalDeclaration;
 import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
@@ -338,6 +339,11 @@ public class TableVisitor implements Visitor {
       
       return(null);
   }
+  public Object visitLocalDeclaration(LocalDeclaration aThis, Object o) {
+      aThis.D1.visit(this, null);
+      aThis.D2.visit(this, null);
+      return (null);
+    }
   
   public Object visitTypeDeclaration(TypeDeclaration ast, Object o) { 
       ast.T.visit(this, null);
@@ -738,4 +744,5 @@ public class TableVisitor implements Visitor {
     public Object visitElseCommand(ElseCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 }

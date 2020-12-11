@@ -56,6 +56,7 @@ import Triangle.AbstractSyntaxTrees.IntegerExpression;
 import Triangle.AbstractSyntaxTrees.IntegerLiteral;
 import Triangle.AbstractSyntaxTrees.LetCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
+import Triangle.AbstractSyntaxTrees.LocalDeclaration;
 import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
@@ -1075,6 +1076,15 @@ public final class Checker implements Visitor {
     idTable.closeScope();
     return null;
   }
+  
+  public Object visitLocalDeclaration(LocalDeclaration aThis, Object o) {
+      idTable.openScope();//Se abre el scope
+      aThis.D1.visit(this, null);//Se visitan las declaraciones locales para D2
+      idTable.lowerScope();//Se vuelve al scope anterior
+      aThis.D2.visit(this, null);//Se visitan las demas declaraciones declaracione
+      idTable.closeLowerScopeLevel();//Se buscan las declaraciones del nivel superior
+      return null;
+    }
 
   // </editor-fold>
   

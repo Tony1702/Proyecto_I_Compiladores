@@ -51,6 +51,7 @@ import Triangle.AbstractSyntaxTrees.IntegerExpression;
 import Triangle.AbstractSyntaxTrees.IntegerLiteral;
 import Triangle.AbstractSyntaxTrees.LetCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
+import Triangle.AbstractSyntaxTrees.LocalDeclaration;
 import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
@@ -222,6 +223,9 @@ public class LayoutVisitor implements Visitor {
   public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
     return layoutBinary("Seq.Decl.", ast.D1, ast.D2);
   }
+  public Object visitLocalDeclaration(LocalDeclaration aThis, Object o) {
+      return layoutBinary("Loc.Decl.", aThis.D1, aThis.D2);
+    }
 
   public Object visitTypeDeclaration(TypeDeclaration ast, Object obj) {
     return layoutBinary("TypeDecl.", ast.I, ast.T);
@@ -610,4 +614,5 @@ public class LayoutVisitor implements Visitor {
     public Object visitLoopCommand(LoopCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 }
