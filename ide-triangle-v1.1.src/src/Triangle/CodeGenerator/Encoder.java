@@ -1078,37 +1078,74 @@ public final class Encoder implements Visitor {
     }
   }
 
-    @Override
-    public Object visitElseCommand(ElseCommand ast, Object o) {
+  @Override
+  public Object visitElseCommand(ElseCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
+    
+  @Override
+  public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
+      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+  
+  // <editor-fold defaultstate="collapsed" desc=" Nuevos Metodos Proyecto III ">
+    
     public Object visitLoopWhileCommand(LoopWhileCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        Frame frame = (Frame) o;
+        int p1, rep;
 
-    @Override
+        p1 = nextInstrAddr;
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        rep = nextInstrAddr;
+        aThis.C.visit(this, frame);
+        patch(p1, nextInstrAddr);
+        aThis.E.visit(this, frame);
+        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, rep);
+        return null;
+    }
+    
     public Object visitLoopUntilCommand(LoopUntilCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Frame frame = (Frame) o;
+        int p1, rep;
+
+        p1 = nextInstrAddr;
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        rep = nextInstrAddr;
+        aThis.C.visit(this, frame);
+        patch(p1, nextInstrAddr);
+        aThis.E.visit(this, frame);
+        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, rep);
+        return null;
     }
 
-    @Override
-    public Object visitLoopDoUntilCommand(LoopDoUntilCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitLoopDoUntilCommand(LoopDoUntilCommand aThis, Object o) {
+        Frame frame = (Frame) o;
+        int p1, rep;
+
+        p1 = nextInstrAddr;
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        rep = nextInstrAddr;
+        aThis.C.visit(this, frame);
+        patch(p1, nextInstrAddr);
+        aThis.E.visit(this, frame);
+        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, rep);
+        return null;
     }
 
-    @Override
     public Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Frame frame = (Frame) o;
+        int p1, rep;
+
+        p1 = nextInstrAddr;
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        rep = nextInstrAddr;
+        aThis.C.visit(this, frame);
+        patch(p1, nextInstrAddr);
+        aThis.E.visit(this, frame);
+        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, rep);
+        return null;
     }
 
-    @Override
-    public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -1125,8 +1162,8 @@ public final class Encoder implements Visitor {
         return new Integer(extraSize1 + extraSize2);
     }
 
-    @Override
     public Object visitLocalDeclaration(LocalDeclaration aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+  // </editor-fold>
 }
