@@ -1082,11 +1082,6 @@ public final class Encoder implements Visitor {
   public Object visitElseCommand(ElseCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-  @Override
-  public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
   
   // <editor-fold defaultstate="collapsed" desc=" Nuevos Metodos Proyecto III ">
     
@@ -1100,7 +1095,7 @@ public final class Encoder implements Visitor {
         aThis.C.visit(this, frame);
         patch(p1, nextInstrAddr);
         aThis.E.visit(this, frame);
-        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, rep);
+        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, rep);
         return null;
     }
     
@@ -1117,23 +1112,37 @@ public final class Encoder implements Visitor {
         emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, rep);
         return null;
     }
+    
+    public Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o) {
+        Frame frame = (Frame) o;
+        int p1, rep;
 
+        //p1 = nextInstrAddr;
+        //emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        rep = nextInstrAddr;
+        aThis.C.visit(this, frame);
+        //patch(p1, nextInstrAddr);
+        aThis.E.visit(this, frame);
+        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, rep);
+        return null;
+    }
+    
     public Object visitLoopDoUntilCommand(LoopDoUntilCommand aThis, Object o) {
         Frame frame = (Frame) o;
         int p1, rep;
 
-        p1 = nextInstrAddr;
-        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        //p1 = nextInstrAddr;
+        //emit(Machine.JUMPop, 0, Machine.CBr, 0);
         rep = nextInstrAddr;
         aThis.C.visit(this, frame);
-        patch(p1, nextInstrAddr);
+        //patch(p1, nextInstrAddr);
         aThis.E.visit(this, frame);
         emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, rep);
         return null;
     }
 
-    public Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o) {
-        Frame frame = (Frame) o;
+    public Object visitLoopForCommand(LoopForCommand aThis, Object o) { //Falta terminar
+       Frame frame = (Frame) o;
         int p1, rep;
 
         p1 = nextInstrAddr;
@@ -1141,7 +1150,7 @@ public final class Encoder implements Visitor {
         rep = nextInstrAddr;
         aThis.C.visit(this, frame);
         patch(p1, nextInstrAddr);
-        aThis.E.visit(this, frame);
+        //aThis.E.visit(this, frame);
         emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, rep);
         return null;
     }
