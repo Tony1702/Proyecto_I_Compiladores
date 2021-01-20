@@ -1085,94 +1085,101 @@ public final class Encoder implements Visitor {
   
   // <editor-fold defaultstate="collapsed" desc=" Nuevos Metodos Proyecto III ">
     
-    public Object visitLoopWhileCommand(LoopWhileCommand aThis, Object o) {
-        Frame frame = (Frame) o;
-        int p1, rep;
+  public Object visitLoopWhileCommand(LoopWhileCommand aThis, Object o) {
+    Frame frame = (Frame) o;
+    int p1, rep;
 
-        p1 = nextInstrAddr;
-        emit(Machine.JUMPop, 0, Machine.CBr, 0);
-        rep = nextInstrAddr;
-        aThis.C.visit(this, frame);
-        patch(p1, nextInstrAddr);
-        aThis.E.visit(this, frame);
-        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, rep);
-        return null;
-    }
+    p1 = nextInstrAddr;
+    emit(Machine.JUMPop, 0, Machine.CBr, 0);
+    rep = nextInstrAddr;
+    aThis.C.visit(this, frame);
+    patch(p1, nextInstrAddr);
+    aThis.E.visit(this, frame);
+    emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, rep);
+    return null;
+  }
+
+  public Object visitLoopUntilCommand(LoopUntilCommand aThis, Object o) {
+    Frame frame = (Frame) o;
+    int p1, rep;
+
+    p1 = nextInstrAddr;
+    emit(Machine.JUMPop, 0, Machine.CBr, 0);
+    rep = nextInstrAddr;
+    aThis.C.visit(this, frame);
+    patch(p1, nextInstrAddr);
+    aThis.E.visit(this, frame);
+    emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, rep);
+    return null;
+  }
+  
+  public Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o) {
+    Frame frame = (Frame) o;
+    int rep;
+
+    rep = nextInstrAddr;
+    aThis.C.visit(this, frame);
+    aThis.E.visit(this, frame);
+    emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, rep);
+    return null;
+  }
+  
+  public Object visitLoopDoUntilCommand(LoopDoUntilCommand aThis, Object o) {
+    Frame frame = (Frame) o;
+    int rep;
+
+    rep = nextInstrAddr;
+    aThis.C.visit(this, frame);
+    aThis.E.visit(this, frame);
+    emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, rep);
+    return null;
+  }
     
-    public Object visitLoopUntilCommand(LoopUntilCommand aThis, Object o) {
-        Frame frame = (Frame) o;
-        int p1, rep;
+  public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
+    Frame frame = (Frame) o;
+    int inic, rep, salir = 0;
 
-        p1 = nextInstrAddr;
-        emit(Machine.JUMPop, 0, Machine.CBr, 0);
-        rep = nextInstrAddr;
-        aThis.C.visit(this, frame);
-        patch(p1, nextInstrAddr);
-        aThis.E.visit(this, frame);
-        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, rep);
-        return null;
-    }
+    inic = nextInstrAddr;
+    emit(Machine.JUMPop, 0, Machine.CBr, 0);
+    aThis.E2.visit(this, frame);
+    aThis.E1.visit(this, frame);
     
-    public Object visitLoopDoWhileCommand(LoopDoWhileCommand aThis, Object o) {
-        Frame frame = (Frame) o;
-        int p1, rep;
-
-        //p1 = nextInstrAddr;
-        //emit(Machine.JUMPop, 0, Machine.CBr, 0);
-        rep = nextInstrAddr;
-        aThis.C.visit(this, frame);
-        //patch(p1, nextInstrAddr);
-        aThis.E.visit(this, frame);
-        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, rep);
-        return null;
-    }
+    rep = nextInstrAddr;
+    emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, salir);
+    aThis.C.visit(this, frame);
+    patch(inic, nextInstrAddr);
     
-    public Object visitLoopDoUntilCommand(LoopDoUntilCommand aThis, Object o) {
-        Frame frame = (Frame) o;
-        int p1, rep;
+    emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, rep);
+    salir = nextInstrAddr;
+    return null;
+  }
+    
+  public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o) {
+    Frame frame = (Frame) o;
+    int extraSize = 0;
 
-        //p1 = nextInstrAddr;
-        //emit(Machine.JUMPop, 0, Machine.CBr, 0);
-        rep = nextInstrAddr;
-        aThis.C.visit(this, frame);
-        //patch(p1, nextInstrAddr);
-        aThis.E.visit(this, frame);
-        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, rep);
-        return null;
-    }
+    int valSize = ((Integer) aThis.E.visit(this, frame)).intValue();
+    aThis.entity = new KnownAddress(valSize, frame.level, frame.size);
+    extraSize = valSize;
 
-    public Object visitLoopForCommand(LoopForCommand aThis, Object o) { //Falta terminar
-       Frame frame = (Frame) o;
-        int p1, rep;
+    writeTableDetails(aThis);
+    return new Integer(extraSize);
+  }
 
-        p1 = nextInstrAddr;
-        emit(Machine.JUMPop, 0, Machine.CBr, 0);
-        rep = nextInstrAddr;
-        aThis.C.visit(this, frame);
-        patch(p1, nextInstrAddr);
-        //aThis.E.visit(this, frame);
-        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, rep);
-        return null;
-    }
+  //visitRecursiveDeclaration
+  //metodo por Adrian Diaz
+  public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
+    Frame frame = (Frame) o;
+    int extraSize1, extraSize2;
 
-    public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
+    Frame frame1 = new Frame (frame, extraSize1);
+    extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
+    return new Integer(extraSize1 + extraSize2);
+  }
 
-    //visitRecursiveDeclaration
-    //metodo por Adrian Diaz
-    public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
-        Frame frame = (Frame) o;
-        int extraSize1, extraSize2;
-
-        extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
-        Frame frame1 = new Frame (frame, extraSize1);
-        extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
-        return new Integer(extraSize1 + extraSize2);
-    }
-
-    public Object visitLocalDeclaration(LocalDeclaration aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  public Object visitLocalDeclaration(LocalDeclaration aThis, Object o) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
   // </editor-fold>
 }

@@ -1,0 +1,8 @@
+! la variable inicializada es reconocida y procesada correctamente
+let
+  var n := 1
+in
+
+  putint(n) ! debe imprimir un 1
+
+end

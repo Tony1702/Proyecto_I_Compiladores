@@ -1,0 +1,13 @@
+! prueba arreglo sencilla 
+! ERROR: tiene un elemento de más 
+
+let
+  var x : array 5 of Integer ;
+  var i : Integer
+
+in
+
+  x := [10, 20, 30, 40, 50, 60] ; ! ERROR: tiene un elemento de más
+  i := 0 
+
+end

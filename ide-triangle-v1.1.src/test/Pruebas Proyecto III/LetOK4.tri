@@ -1,0 +1,19 @@
+! lets anidados
+! ojo con Table Details
+let
+
+  var a := 0
+
+in
+
+  let
+    const b ~ a ;      ! la declaración de la constante b ve a la variable a
+    var   a := b + 1   ! a es re-declarada
+  in
+    putint (a) ! debe imprimir 1
+  end
+
+end
+ 
+
+
