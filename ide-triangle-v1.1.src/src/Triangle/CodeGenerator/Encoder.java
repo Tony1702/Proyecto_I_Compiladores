@@ -1137,20 +1137,48 @@ public final class Encoder implements Visitor {
     
   public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
     Frame frame = (Frame) o;
-    int inic, rep, salir = 0;
+    int inic, rep, succ, evalc = 0, id, salir = 0;
 
+    //********** Opcion 1 **********//
+//    emit(Machine.PUSHop, 0, 0, 2);
+//    inic = nextInstrAddr;
+//    succ = (Integer) aThis.E2.visit(this, frame);
+//    //encodeAssign(succ);
+//    aThis.E1.visit(this, frame);
+//    //encodeAssign(aThis.I);
+//    
+//    //emit(Machine.CALLop, Machine.SBr, Machine.PBr, le);
+//    rep = nextInstrAddr;
+//    emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, salir);
+//    aThis.C.visit(this, frame);
+//    patch(inic, nextInstrAddr);
+//    
+//    //encodeFetch(aThis.I);
+//    emit(Machine.CALLop, Machine.SBr, Machine.PBr, succ);
+//    //encodeAssign(aThis.I);
+//    
+//    emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, rep);
+//    salir = nextInstrAddr;
+//    emit(Machine.POPop, 0, 0, 2);
+
+    //********** Opcion 2 **********//
     inic = nextInstrAddr;
-    emit(Machine.JUMPop, 0, Machine.CBr, 0);
-    aThis.E2.visit(this, frame);
-    aThis.E1.visit(this, frame);
+    succ = (Integer) aThis.E2.visit(this, frame);  
+    id = (Integer) aThis.E1.visit(this, frame);   
+    emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, evalc);
     
-    rep = nextInstrAddr;
-    emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, salir);
+    rep = nextInstrAddr; 
     aThis.C.visit(this, frame);
-    patch(inic, nextInstrAddr);
+    emit(Machine.CALLop, Machine.SBr, Machine.PBr, succ);
     
+    evalc = nextInstrAddr;
+    emit(Machine.LOADop, 0, 0, 2);
+    //emit(Machine.CALLop, Machine.SBr, Machine.PBr, ge);
     emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, rep);
+    
     salir = nextInstrAddr;
+    emit(Machine.POPop, 0, 0, 2);
+    
     return null;
   }
     
@@ -1169,17 +1197,24 @@ public final class Encoder implements Visitor {
   //visitRecursiveDeclaration
   //metodo por Adrian Diaz
   public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
-    Frame frame = (Frame) o;
-    int extraSize1, extraSize2;
-
-    extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
-    Frame frame1 = new Frame (frame, extraSize1);
-    extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
-    return new Integer(extraSize1 + extraSize2);
+//    Frame frame = (Frame) o;
+//    int extraSize1, extraSize2;
+//
+//    extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
+//    Frame frame1 = new Frame (frame, extraSize1);
+//    extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
+//    return new Integer(extraSize1 + extraSize2);
+      throw new UnsupportedOperationException("Not supported yet.");
   }
 
   public Object visitLocalDeclaration(LocalDeclaration aThis, Object o) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    Frame frame = (Frame) o;
+    int extraSize1, extraSize2;
+
+    extraSize1 = ((Integer) aThis.D1.visit(this, frame)).intValue();
+    Frame frame1 = new Frame (frame, extraSize1);
+    extraSize2 = ((Integer) aThis.D2.visit(this, frame1)).intValue();
+    return new Integer(extraSize1 + extraSize2);
   }
   // </editor-fold>
 }
