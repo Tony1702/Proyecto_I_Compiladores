@@ -15,6 +15,7 @@ import Triangle.ContextualAnalyzer.Checker;
 import Triangle.CodeGenerator.Encoder;
 import Triangle.SyntacticAnalyzer.HtmlWriter;
 import Triangle.SyntacticAnalyzer.XMLWriter;
+import TAM.Disassembler;
 
 
 
@@ -31,7 +32,7 @@ public class IDECompiler {
     /**
      * Creates a new instance of IDECompiler.
      *
-     */
+     */ 
     public IDECompiler() {
     }
     
@@ -64,7 +65,7 @@ public class IDECompiler {
                 encoder.encodeRun(rootAST, false);
                 
                 if (report.numErrors == 0) {
-                    //encoder.saveObjectProgram(sourceName.replace(".tri", ".tam"));
+                    encoder.saveObjectProgram(sourceName.replace(".tri", ".tam"));
                     success = true;
                 }
             }
@@ -75,7 +76,7 @@ public class IDECompiler {
             HtmlWriter fileWriter =  new HtmlWriter(sourceName);
             fileWriter.write(scanner.getHtmlContent());
             XMLWriter xml = new XMLWriter(sourceName);
-            xml.writeFile(rootAST);
+            xml.writeFile(rootAST); 
         }
         else
             System.out.println("Compilation was unsuccessful.");
