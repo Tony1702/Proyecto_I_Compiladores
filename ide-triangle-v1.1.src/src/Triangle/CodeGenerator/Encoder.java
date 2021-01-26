@@ -1137,48 +1137,23 @@ public final class Encoder implements Visitor {
     
   public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
     Frame frame = (Frame) o;
-    int inic, rep, succ, evalc = 0, id, salir = 0;
-
-    //********** Opcion 1 **********//
-//    emit(Machine.PUSHop, 0, 0, 2);
-//    inic = nextInstrAddr;
-//    succ = (Integer) aThis.E2.visit(this, frame);
-//    //encodeAssign(succ);
-//    aThis.E1.visit(this, frame);
-//    //encodeAssign(aThis.I);
-//    
-//    //emit(Machine.CALLop, Machine.SBr, Machine.PBr, le);
-//    rep = nextInstrAddr;
-//    emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, salir);
-//    aThis.C.visit(this, frame);
-//    patch(inic, nextInstrAddr);
-//    
-//    //encodeFetch(aThis.I);
-//    emit(Machine.CALLop, Machine.SBr, Machine.PBr, succ);
-//    //encodeAssign(aThis.I);
-//    
-//    emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, rep);
-//    salir = nextInstrAddr;
-//    emit(Machine.POPop, 0, 0, 2);
-
-    //********** Opcion 2 **********//
-    inic = nextInstrAddr;
-    succ = (Integer) aThis.E2.visit(this, frame);  
-    id = (Integer) aThis.E1.visit(this, frame);   
-    emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, evalc);
-    
-    rep = nextInstrAddr; 
-    aThis.C.visit(this, frame);
-    emit(Machine.CALLop, Machine.SBr, Machine.PBr, succ);
-    
-    evalc = nextInstrAddr;
-    emit(Machine.LOADop, 0, 0, 2);
-    //emit(Machine.CALLop, Machine.SBr, Machine.PBr, ge);
-    emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, rep);
-    
-    salir = nextInstrAddr;
-    emit(Machine.POPop, 0, 0, 2);
-    
+    int repetir, comparar, varControl, extraSize1, extraSize2;
+    extraSize1 = (Integer) aThis.E1.visit(this, frame);
+    Frame frame1 = new Frame(frame, extraSize1);
+    varControl = nextInstrAddr;
+    Declaration dec = new VarInitializationDeclaration(aThis.I, aThis.E2, aThis.position);
+    extraSize2 = (Integer) dec.visit(this, frame1);
+    comparar = nextInstrAddr;
+    emit(Machine.JUMPop, 0, Machine.CBr, 0);
+    Frame frame2 = new Frame(frame, extraSize1 + extraSize2);
+    repetir = nextInstrAddr;
+    aThis.C.visit(this, frame2);
+    emit(Machine.CALLop, varControl, Machine.PBr, Machine.succDisplacement);
+    patch(comparar, nextInstrAddr); 
+    emit(Machine.LOADop, extraSize1 + extraSize2, Machine.STr, -2); 
+    emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.geDisplacement); 
+    emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, repetir); 
+    emit(Machine.POPop, 0, 0, extraSize1 + extraSize2); 
     return null;
   }
     
@@ -1197,14 +1172,14 @@ public final class Encoder implements Visitor {
   //visitRecursiveDeclaration
   //metodo por Adrian Diaz
   public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
-//    Frame frame = (Frame) o;
-//    int extraSize1, extraSize2;
-//
-//    extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
-//    Frame frame1 = new Frame (frame, extraSize1);
-//    extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
-//    return new Integer(extraSize1 + extraSize2);
-      throw new UnsupportedOperationException("Not supported yet.");
+    Frame frame = (Frame) o;
+    int extraSize1, test;
+    test = nextInstrAddr;
+    extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
+    nextInstrAddr = test;
+    extraSize1 = ((Integer) ast.D2.visit(this, frame)).intValue();
+    return new Integer(extraSize1);
+      
   }
 
   public Object visitLocalDeclaration(LocalDeclaration aThis, Object o) {
