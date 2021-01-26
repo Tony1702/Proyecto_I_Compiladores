@@ -22,7 +22,6 @@ public class RecursiveDeclaration extends Declaration {
   }
 
   public Object visit(Visitor v, Object o) {
-    System.out.println("Aqui en visitor");
     return v.visitRecursiveDeclaration(this, o);
   }
 

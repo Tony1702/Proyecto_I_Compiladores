@@ -148,16 +148,16 @@ public final class Checker implements Visitor {
   
   //Modificado por Adrian Diaz
   public Object visitLetCommand(LetCommand ast, Object o) {
-    System.out.println("LetCommand /n");
+    //System.out.println("LetCommand");
     if(ast.D instanceof FuncDeclaration) {
-        System.out.println("Es Func " + ast.D.toString());
+        //System.out.println("Es Func " + ast.D.toString());
     FuncDeclaration FuncBinding = (FuncDeclaration) ast.D.visit(this,null);
     idTable.enter(FuncBinding.I.spelling, ast.D); // permits recursion
         if (ast.D.duplicated)
           reporter.reportError ("identifier \"%\" already declared",
                              FuncBinding.I.spelling, ast.position); }  
     else if(ast.D instanceof ProcDeclaration) {
-        System.out.println("Es Proc " + ast.D.toString());
+        //System.out.println("Es Proc " + ast.D.toString());
     ProcDeclaration ProcBinding = (ProcDeclaration) ast.D.visit(this,null);
     idTable.enter(ProcBinding.I.spelling, ast.D); // permits recursion
         if (ast.D.duplicated)
@@ -343,7 +343,7 @@ public final class Checker implements Visitor {
   }
 
   public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
-    System.out.println("Aqui 1");
+    //System.out.println("Aqui 1");
     ast.T = (TypeDenoter) ast.T.visit(this, null);
     idTable.enter (ast.I.spelling, ast); // permits recursion
     if (ast.duplicated)

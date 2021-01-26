@@ -1134,8 +1134,11 @@ public final class Encoder implements Visitor {
     emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, rep);
     return null;
   }
-    
+  
+    //Método por Anthony Ulloa, Adrián Díaz y Fabián Barahona
+    //versión no completamente funcional
   public Object visitLoopForCommand(LoopForCommand aThis, Object o) {
+      try {
     Frame frame = (Frame) o;
     int repetir, comparar, varControl, extraSize1, extraSize2;
     extraSize1 = (Integer) aThis.E1.visit(this, frame);
@@ -1155,6 +1158,10 @@ public final class Encoder implements Visitor {
     emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, repetir); 
     emit(Machine.POPop, 0, 0, extraSize1 + extraSize2); 
     return null;
+      }
+      catch (Exception e) {
+          throw new UnsupportedOperationException("Loop For not supported yet.");
+      }
   }
     
   public Object visitVarInitializationDeclaration(VarInitializationDeclaration aThis, Object o) {
@@ -1172,6 +1179,7 @@ public final class Encoder implements Visitor {
   //visitRecursiveDeclaration
   //metodo por Adrian Diaz
   public Object visitRecursiveDeclaration(RecursiveDeclaration ast, Object o) {
+            try {
     Frame frame = (Frame) o;
     int extraSize1, test;
     test = nextInstrAddr;
@@ -1179,6 +1187,10 @@ public final class Encoder implements Visitor {
     nextInstrAddr = test;
     extraSize1 = ((Integer) ast.D2.visit(this, frame)).intValue();
     return new Integer(extraSize1);
+            }
+       catch (Exception e) {
+          throw new UnsupportedOperationException("Recursive not supported yet.");
+      }           
       
   }
 
